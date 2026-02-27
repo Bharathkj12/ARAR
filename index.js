@@ -243,4 +243,48 @@ document.addEventListener('DOMContentLoaded', () => {
         img.src = src;
     });
 
+    // ---- Mouse Trail ----
+    const trailDots = [];
+    const numDots = 15; // smooth trailing effect
+
+    for (let i = 0; i < numDots; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'mouse-trail-dot';
+        document.body.appendChild(dot);
+        trailDots.push({
+            element: dot,
+            x: window.innerWidth / 2,
+            y: window.innerHeight / 2
+        });
+    }
+
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+
+    window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    });
+
+    function animateTrail() {
+        let x = mouseX;
+        let y = mouseY;
+
+        trailDots.forEach((dot, index) => {
+            const nextDot = trailDots[index + 1] || trailDots[0];
+            dot.x = x;
+            dot.y = y;
+
+            const scale = 1 - (index / numDots);
+            dot.element.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
+
+            x += (nextDot.x - x) * 0.4;
+            y += (nextDot.y - y) * 0.4;
+        });
+
+        requestAnimationFrame(animateTrail);
+    }
+
+    animateTrail();
+
 });
