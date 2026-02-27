@@ -8,10 +8,10 @@
 
 /* ---- CSS Custom Properties ---- */
 :root {
-  /* Brand Colors */
-  --deep-red: #8B1A1A;
-  --deep-red-hover: #A52A2A;
-  --deep-red-glow: rgba(139, 26, 26, 0.35);
+  /* Brand Colors — matched to logo red */
+  --deep-red: #D22630;
+  --deep-red-hover: #E02D38;
+  --deep-red-glow: rgba(210, 38, 48, 0.35);
   --slate-grey: #2C2C2C;
   --slate-dark: #1A1A1A;
   --clean-black: #0D0D0D;
@@ -136,15 +136,19 @@ ul {
 .nav-logo .logo-mark {
   width: 44px;
   height: 44px;
-  background: var(--deep-red);
   border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 900;
-  font-size: 1.1rem;
-  color: var(--white);
-  letter-spacing: 1px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.nav-logo .logo-mark img,
+.footer-brand .logo-mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .nav-logo .logo-text {
@@ -1302,15 +1306,11 @@ ul {
 .footer-brand .logo-mark {
   width: 48px;
   height: 48px;
-  background: var(--deep-red);
   border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 900;
-  font-size: 0.9rem;
-  color: var(--white);
-  letter-spacing: 1px;
+  overflow: hidden;
   margin-bottom: 20px;
 }
 
