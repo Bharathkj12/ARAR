@@ -245,7 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ---- Mouse Trail ----
     const trailDots = [];
-    const numDots = 15; // smooth trailing effect
+    const numDots = 12;
 
     for (let i = 0; i < numDots; i++) {
         const dot = document.createElement('div');
@@ -277,9 +277,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const scale = 1 - (index / numDots);
             dot.element.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
+            dot.element.style.opacity = scale * 0.6;
 
-            x += (nextDot.x - x) * 0.4;
-            y += (nextDot.y - y) * 0.4;
+            x += (nextDot.x - x) * 0.35;
+            y += (nextDot.y - y) * 0.35;
         });
 
         requestAnimationFrame(animateTrail);
