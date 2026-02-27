@@ -243,6 +243,85 @@ document.addEventListener('DOMContentLoaded', () => {
         img.src = src;
     });
 
+    // ---- About Section Scroll Gallery ----
+    const aboutGallery = document.getElementById('aboutGallery');
+    const gallerySlides = document.querySelectorAll('.about-gallery-slide');
+    const galleryDots = document.querySelectorAll('.about-gallery-dot');
+    let currentGallerySlide = 0;
+    const totalGallerySlides = gallerySlides.length;
+    let isInsideGallery = false;
+    let galleryScrollCooldown = false;
+
+    function goToGallerySlide(index) {
+        gallerySlides.forEach(s => s.classList.remove('active'));
+        galleryDots.forEach(d => d.classList.remove('active'));
+        currentGallerySlide = index;
+        gallerySlides[currentGallerySlide].classList.add('active');
+        galleryDots[currentGallerySlide].classList.add('active');
+    }
+
+    if (aboutGallery && totalGallerySlides > 0) {
+        // Track if cursor is inside the gallery
+        aboutGallery.addEventListener('mouseenter', () => { isInsideGallery = true; });
+        aboutGallery.addEventListener('mouseleave', () => { isInsideGallery = false; });
+
+        // Scroll within box — intercept wheel events
+        aboutGallery.addEventListener('wheel', (e) => {
+            // Always prevent page scroll when cursor is inside the gallery
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (galleryScrollCooldown) return;
+            galleryScrollCooldown = true;
+
+            if (e.deltaY > 0) {
+                const next = (currentGallerySlide + 1) % totalGallerySlides;
+                goToGallerySlide(next);
+            } else {
+                const prev = (currentGallerySlide - 1 + totalGallerySlides) % totalGallerySlides;
+                goToGallerySlide(prev);
+            }
+
+            setTimeout(() => { galleryScrollCooldown = false; }, 500);
+        }, { passive: false });
+
+        // Dot click navigation
+        galleryDots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                const target = parseInt(dot.getAttribute('data-index'));
+                if (target !== currentGallerySlide) {
+                    goToGallerySlide(target);
+                }
+            });
+        });
+
+        // ---- RadiusOnScroll Effect ----
+        const startRadius = 0;    // starts sharp / full-bleed
+        const endRadius = 48;     // rounds to 48px
+        const galleryTrack = document.getElementById('aboutGalleryTrack');
+
+        function updateRadiusOnScroll() {
+            const rect = aboutGallery.getBoundingClientRect();
+            const windowH = window.innerHeight;
+
+            // Start when bottom of element enters viewport, end when top reaches center
+            const triggerStart = windowH;   // element bottom enters viewport
+            const triggerEnd = windowH * 0.3; // element is well into view
+
+            // Progress: 0 = just entering, 1 = fully in view
+            const progress = Math.min(Math.max(
+                (triggerStart - rect.top) / (triggerStart - triggerEnd),
+                0), 1);
+
+            const currentRadius = startRadius + (endRadius - startRadius) * progress;
+            aboutGallery.style.borderRadius = currentRadius + 'px';
+
+            requestAnimationFrame(updateRadiusOnScroll);
+        }
+
+        requestAnimationFrame(updateRadiusOnScroll);
+    }
+
     // ---- Mouse Trail ----
     const trailDots = [];
     const numDots = 12;

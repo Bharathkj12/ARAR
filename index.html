@@ -301,8 +301,33 @@
             </div>
           </div>
         </div>
-        <div class="about-image fade-in-right">
-          <div class="about-image-bg"></div>
+        <div class="about-image fade-in-right" id="aboutGallery">
+          <div class="about-gallery-track" id="aboutGalleryTrack">
+            <div class="about-gallery-slide active">
+              <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80" alt="EPC Construction">
+            </div>
+            <div class="about-gallery-slide">
+              <img src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=800&q=80" alt="Substation Works">
+            </div>
+            <div class="about-gallery-slide">
+              <img src="https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=800&q=80"
+                alt="Power Infrastructure">
+            </div>
+            <div class="about-gallery-slide">
+              <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800&q=80"
+                alt="Cable Laying Works">
+            </div>
+            <div class="about-gallery-slide">
+              <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80" alt="Dubai Office">
+            </div>
+          </div>
+          <div class="about-gallery-dots" id="aboutGalleryDots">
+            <span class="about-gallery-dot active" data-index="0"></span>
+            <span class="about-gallery-dot" data-index="1"></span>
+            <span class="about-gallery-dot" data-index="2"></span>
+            <span class="about-gallery-dot" data-index="3"></span>
+            <span class="about-gallery-dot" data-index="4"></span>
+          </div>
           <div class="about-badge">
             <div class="about-badge-number">15+</div>
             <div class="about-badge-text">Years of<br>Excellence</div>
@@ -480,36 +505,65 @@
   </section>
 
 
-  <!-- ============ CLIENT CAROUSEL ============ -->
+  <!-- ============ OUR CLIENTS — ANIMATED LOGO WHEELS ============ -->
   <section class="section clients" id="clients">
     <div class="container">
       <div class="clients-header fade-in">
-        <span class="section-tag"><span class="line"></span> Our Partners <span class="line"></span></span>
+        <span class="section-tag"><span class="line"></span> Our Clients <span class="line"></span></span>
         <h2 class="section-title">Trusted by Industry Leaders</h2>
         <p class="section-subtitle">
           We are proud to work alongside the UAE's most prominent infrastructure and energy organizations.
         </p>
       </div>
     </div>
-    <div class="carousel-wrapper">
-      <div class="carousel-track" id="carouselTrack">
-        <div class="client-logo"><span class="client-logo-text">DEWA</span></div>
-        <div class="client-logo"><span class="client-logo-text">RTA</span></div>
-        <div class="client-logo"><span class="client-logo-text">ETIHAD RAIL</span></div>
-        <div class="client-logo"><span class="client-logo-text">FEWA</span></div>
-        <div class="client-logo"><span class="client-logo-text">EXPO 2020</span></div>
-        <div class="client-logo"><span class="client-logo-text">TANMIYAT</span></div>
-        <div class="client-logo"><span class="client-logo-text">MBR CITY</span></div>
-        <div class="client-logo"><span class="client-logo-text">MAPA GUNAL</span></div>
+
+    <!-- Outer ring — scrolls RIGHT -->
+    <div class="logo-wheel-wrapper">
+      <div class="logo-wheel-track wheel-right">
+        <div class="logo-wheel-item"><img src="img/clients/client-1.jpg" alt="Client 1"></div>
+        <div class="logo-wheel-item"><img src="img/clients/client-2.jpg" alt="Client 2"></div>
+        <div class="logo-wheel-item"><img src="img/clients/client-3.jpg" alt="Client 3"></div>
+        <div class="logo-wheel-item"><img src="img/clients/client-4.jpg" alt="Client 4"></div>
+        <div class="logo-wheel-item"><img src="img/clients/client-5.jpg" alt="Client 5"></div>
+        <div class="logo-wheel-item"><img src="img/clients/client-6.jpg" alt="Client 6"></div>
+        <div class="logo-wheel-item"><img src="img/clients/client-7.jpg" alt="Client 7"></div>
+        <div class="logo-wheel-item"><img src="img/clients/client-8.jpg" alt="Client 8"></div>
+        <div class="logo-wheel-item"><img src="img/clients/client-9.jpg" alt="Client 9"></div>
         <!-- Duplicate for infinite scroll -->
-        <div class="client-logo"><span class="client-logo-text">DEWA</span></div>
-        <div class="client-logo"><span class="client-logo-text">RTA</span></div>
-        <div class="client-logo"><span class="client-logo-text">ETIHAD RAIL</span></div>
-        <div class="client-logo"><span class="client-logo-text">FEWA</span></div>
-        <div class="client-logo"><span class="client-logo-text">EXPO 2020</span></div>
-        <div class="client-logo"><span class="client-logo-text">TANMIYAT</span></div>
-        <div class="client-logo"><span class="client-logo-text">MBR CITY</span></div>
-        <div class="client-logo"><span class="client-logo-text">MAPA GUNAL</span></div>
+        <div class="logo-wheel-item"><img src="img/clients/client-1.jpg" alt="Client 1"></div>
+        <div class="logo-wheel-item"><img src="img/clients/client-2.jpg" alt="Client 2"></div>
+        <div class="logo-wheel-item"><img src="img/clients/client-3.jpg" alt="Client 3"></div>
+        <div class="logo-wheel-item"><img src="img/clients/client-4.jpg" alt="Client 4"></div>
+        <div class="logo-wheel-item"><img src="img/clients/client-5.jpg" alt="Client 5"></div>
+        <div class="logo-wheel-item"><img src="img/clients/client-6.jpg" alt="Client 6"></div>
+        <div class="logo-wheel-item"><img src="img/clients/client-7.jpg" alt="Client 7"></div>
+        <div class="logo-wheel-item"><img src="img/clients/client-8.jpg" alt="Client 8"></div>
+        <div class="logo-wheel-item"><img src="img/clients/client-9.jpg" alt="Client 9"></div>
+      </div>
+    </div>
+
+    <!-- Inner ring — scrolls LEFT -->
+    <div class="logo-wheel-wrapper">
+      <div class="logo-wheel-track wheel-left">
+        <div class="logo-wheel-item"><img src="img/clients/client-10.jpg" alt="Client 10"></div>
+        <div class="logo-wheel-item"><img src="img/clients/client-11.jpg" alt="Client 11"></div>
+        <div class="logo-wheel-item"><img src="img/clients/client-12.jpg" alt="Client 12"></div>
+        <div class="logo-wheel-item"><img src="img/clients/client-13.jpg" alt="Client 13"></div>
+        <div class="logo-wheel-item"><img src="img/clients/client-14.jpg" alt="Client 14"></div>
+        <div class="logo-wheel-item"><img src="img/clients/client-15.jpg" alt="Client 15"></div>
+        <div class="logo-wheel-item"><img src="img/clients/client-16.jpg" alt="Client 16"></div>
+        <div class="logo-wheel-item"><img src="img/clients/client-17.jpg" alt="Client 17"></div>
+        <div class="logo-wheel-item"><img src="img/clients/client-18.jpg" alt="Client 18"></div>
+        <!-- Duplicate for infinite scroll -->
+        <div class="logo-wheel-item"><img src="img/clients/client-10.jpg" alt="Client 10"></div>
+        <div class="logo-wheel-item"><img src="img/clients/client-11.jpg" alt="Client 11"></div>
+        <div class="logo-wheel-item"><img src="img/clients/client-12.jpg" alt="Client 12"></div>
+        <div class="logo-wheel-item"><img src="img/clients/client-13.jpg" alt="Client 13"></div>
+        <div class="logo-wheel-item"><img src="img/clients/client-14.jpg" alt="Client 14"></div>
+        <div class="logo-wheel-item"><img src="img/clients/client-15.jpg" alt="Client 15"></div>
+        <div class="logo-wheel-item"><img src="img/clients/client-16.jpg" alt="Client 16"></div>
+        <div class="logo-wheel-item"><img src="img/clients/client-17.jpg" alt="Client 17"></div>
+        <div class="logo-wheel-item"><img src="img/clients/client-18.jpg" alt="Client 18"></div>
       </div>
     </div>
   </section>
