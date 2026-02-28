@@ -1052,16 +1052,38 @@ ul {
   text-align: center;
   padding: 40px 20px;
   border-radius: var(--radius-lg);
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  transition: all var(--transition-base);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: all 0.5s var(--ease-out);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.stat-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transform: skewX(-20deg);
+  transition: all 0.7s ease;
 }
 
 .stat-item:hover {
-  transform: translateY(-4px);
-  border-color: rgba(139, 26, 26, 0.3);
+  transform: translateY(-8px) scale(1.02);
+  border-color: var(--deep-red);
+  background: linear-gradient(135deg, rgba(210, 38, 48, 0.15) 0%, rgba(210, 38, 48, 0.05) 100%);
+  box-shadow: 0 15px 35px var(--deep-red-glow), 0 0 15px rgba(210, 38, 48, 0.3) inset;
+}
+
+.stat-item:hover::before {
+  left: 150%;
 }
 
 .stat-number {
