@@ -322,43 +322,7 @@ document.addEventListener('DOMContentLoaded', () => {
         requestAnimationFrame(updateRadiusOnScroll);
     }
 
-    // ---- Client Logo Wheel Animation (JS-driven) ----
-    document.querySelectorAll('.logo-wheel-track').forEach(track => {
-        const items = track.querySelectorAll('.logo-wheel-item');
-        const halfCount = items.length / 2; // first half are originals, second half are duplicates
-        const gap = 24; // must match CSS gap
-        let paused = false;
-        let offset = 0;
 
-        // Calculate pixel width of the first set (original items + their gaps)
-        let setWidth = 0;
-        for (let i = 0; i < halfCount; i++) {
-            setWidth += items[i].offsetWidth + gap;
-        }
-
-        const isReverse = track.classList.contains('wheel-left');
-        const speed = isReverse ? 0.6 : 0.5; // px per frame
-
-        if (isReverse) offset = -setWidth;
-
-        track.parentElement.addEventListener('mouseenter', () => { paused = true; });
-        track.parentElement.addEventListener('mouseleave', () => { paused = false; });
-
-        function animate() {
-            if (!paused) {
-                if (isReverse) {
-                    offset += speed;
-                    if (offset >= 0) offset = -setWidth;
-                } else {
-                    offset -= speed;
-                    if (offset <= -setWidth) offset = 0;
-                }
-                track.style.transform = `translateX(${offset}px)`;
-            }
-            requestAnimationFrame(animate);
-        }
-        requestAnimationFrame(animate);
-    });
 
     // ---- Mouse Trail ----
     const trailDots = [];

@@ -520,13 +520,43 @@ ul {
   background: var(--deep-red);
   color: var(--white);
   border-color: var(--deep-red);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transform: skewX(-20deg);
+  animation: shimmerBtn 3.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+  z-index: -1;
+}
+
+@keyframes shimmerBtn {
+  0% {
+    left: -100%;
+  }
+
+  25% {
+    left: 200%;
+  }
+
+  100% {
+    left: 200%;
+  }
 }
 
 .btn-primary:hover {
   background: var(--deep-red-hover);
   border-color: var(--deep-red-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 30px var(--deep-red-glow);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 10px 35px var(--deep-red-glow);
 }
 
 .btn-outline {
@@ -1192,63 +1222,174 @@ ul {
   margin: 0 auto;
 }
 
-/* Wheel wrapper — fade edges */
-.logo-wheel-wrapper {
+/* ============================================
+   CIRCULAR LOGO WHEEL (Flat 2D — Framer-style)
+   ============================================ */
+
+/* Main container — centres everything */
+.logo-wheel-container {
+  --wheel-size: clamp(320px, 55vw, 620px);
+  --logo-size: clamp(56px, 8vw, 85px);
+  --anim-speed: 30s;
   position: relative;
-  overflow: hidden;
-  mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
-  -webkit-mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
-  padding: 16px 0;
-}
-
-.logo-wheel-wrapper+.logo-wheel-wrapper {
-  margin-top: 12px;
-}
-
-/* Track — JS drives the animation */
-.logo-wheel-track {
-  display: flex;
-  gap: 24px;
-  width: max-content;
-  will-change: transform;
-  transform: translateX(0);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-}
-
-/* Individual logo item — circular */
-.logo-wheel-item {
-  flex-shrink: 0;
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  overflow: hidden;
-  background: var(--glass-bg);
-  border: 2px solid var(--glass-border);
+  width: var(--wheel-size);
+  height: var(--wheel-size);
+  margin: 60px auto 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.logo-wheel-item img {
+/* Dotted circle decoration around centre */
+.logo-wheel-ring {
+  position: absolute;
+  inset: 38%;
+  border-radius: 50%;
+  border: 2px dashed rgba(139, 26, 26, 0.25);
+  pointer-events: none;
+}
+
+/* Centre title */
+.logo-wheel-title {
+  position: absolute;
+  z-index: 5;
+  font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+  font-weight: 800;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--white);
+  background: var(--deep-red);
+  padding: 14px 36px;
+  border-radius: var(--radius-full);
+  box-shadow: 0 8px 30px var(--deep-red-glow), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* Rotating circle track */
+.logo-circle {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  animation: wheelSpin var(--anim-speed) linear infinite;
+}
+
+/* Each slot — positioned on the circle edge */
+.logo-slot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--logo-size);
+  height: var(--logo-size);
+  /* Move to centre, then rotate to angle, then push outward by half the wheel */
+  transform:
+    translate(-50%, -50%) rotate(calc(var(--i) * 45deg)) translateY(calc(var(--wheel-size) / -2)) rotate(calc(var(--i) * -45deg));
+  /* counter-rotate so logo stays upright */
+}
+
+/* The logo circle card */
+.logo-card {
   width: 100%;
   height: 100%;
-  object-fit: cover;
   border-radius: 50%;
-  filter: grayscale(30%);
-  transition: filter 0.3s ease, transform 0.3s ease;
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+  transition: transform 0.35s var(--ease-spring), box-shadow 0.35s var(--ease-spring);
+  cursor: pointer;
+  position: relative;
+  /* Counter-rotate to stay upright while the track spins */
+  animation: wheelCounterSpin var(--anim-speed) linear infinite;
 }
 
-.logo-wheel-item:hover {
-  border-color: var(--deep-red);
-  transform: scale(1.15);
-  box-shadow: 0 0 20px var(--deep-red-glow), 0 4px 16px rgba(0, 0, 0, 0.4);
+.logo-card img {
+  width: 72%;
+  height: 72%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
 }
 
-.logo-wheel-item:hover img {
-  filter: grayscale(0%);
+/* Hover — scale up + red glow ring */
+.logo-card:hover {
+  transform: scale(1.2);
+  box-shadow:
+    0 10px 35px rgba(0, 0, 0, 0.5),
+    0 0 0 3px var(--deep-red),
+    0 0 20px var(--deep-red-glow);
+  z-index: 20;
+}
+
+.logo-card:hover img {
   transform: scale(1.08);
+}
+
+/* Tooltip — appears on hover */
+.logo-card::after {
+  content: attr(data-title);
+  position: absolute;
+  bottom: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  background: var(--clean-black);
+  color: var(--white);
+  padding: 6px 14px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(139, 26, 26, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.25s var(--ease-spring);
+  pointer-events: none;
+  z-index: 30;
+}
+
+.logo-card:hover::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Keyframes */
+@keyframes wheelSpin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes wheelCounterSpin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+/* Responsive: smaller screens */
+@media (max-width: 768px) {
+  .logo-wheel-container {
+    --wheel-size: 300px;
+    --logo-size: 52px;
+  }
+
+  .logo-wheel-title {
+    font-size: 0.85rem;
+    padding: 10px 22px;
+    letter-spacing: 2px;
+  }
 }
 
 
