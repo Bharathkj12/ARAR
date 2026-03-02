@@ -679,6 +679,55 @@ ul {
 
 
 /* ============================================
+   CHAIRMAN SLIDE (Hero Slide 1)
+   ============================================ */
+.chairman-overlay {
+  background: linear-gradient(to right,
+      rgba(13, 13, 13, 0.15) 0%,
+      rgba(13, 13, 13, 0.4) 35%,
+      rgba(13, 13, 13, 0.85) 55%,
+      rgba(13, 13, 13, 0.95) 75%,
+      rgba(13, 13, 13, 0.97) 100%) !important;
+}
+
+.chairman-slide-content {
+  max-width: 100% !important;
+  padding: 0 6% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+}
+
+.chairman-text {
+  max-width: 560px;
+  margin-left: auto;
+  text-align: left;
+}
+
+.chairman-text .hero-title {
+  font-size: clamp(2rem, 3.5vw, 3.5rem);
+  line-height: 1.2;
+}
+
+.chairman-divider {
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--deep-red), var(--deep-red-hover));
+  border-radius: 2px;
+  margin: 24px 0;
+}
+
+.chairman-name {
+  font-size: clamp(0.95rem, 1.2vw, 1.15rem);
+  color: var(--text-muted);
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 36px;
+}
+
+
+/* ============================================
    SECTION SHARED STYLES
    ============================================ */
 .section {
@@ -1919,6 +1968,67 @@ ul {
 
   .scroll-indicator {
     display: none;
+  }
+
+  .chairman-slide-content {
+    justify-content: flex-end !important;
+    padding-bottom: 60px !important;
+    padding-top: 0 !important;
+  }
+
+  .chairman-text {
+    max-width: 100%;
+    margin-left: 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .chairman-text .hero-tag {
+    margin-bottom: 10px;
+    padding: 5px 14px;
+    font-size: 0.6rem;
+  }
+
+  .chairman-text .hero-title {
+    font-size: clamp(1.4rem, 5.5vw, 2rem);
+    margin-bottom: 8px;
+  }
+
+  .chairman-text .chairman-divider {
+    margin: 8px 0;
+    width: 50px;
+    height: 2px;
+  }
+
+  .chairman-text .chairman-name {
+    margin-bottom: 14px;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+  }
+
+  .chairman-text .hero-btns {
+    gap: 8px;
+  }
+
+  .chairman-text .hero-btns .btn {
+    padding: 12px 24px;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+  }
+
+  .chairman-overlay {
+    background: linear-gradient(to top,
+        rgba(13, 13, 13, 0.98) 0%,
+        rgba(13, 13, 13, 0.95) 20%,
+        rgba(13, 13, 13, 0.7) 40%,
+        rgba(13, 13, 13, 0.15) 60%,
+        rgba(13, 13, 13, 0) 75%) !important;
+  }
+
+  .hero-slide-bg {
+    background-position: center top;
   }
 
   .services-grid {
