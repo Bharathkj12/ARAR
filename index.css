@@ -1211,10 +1211,7 @@ ul {
 .stats-bg {
   position: absolute;
   inset: 0;
-  background-image: url('https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=1400&q=80');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
+  background: var(--clean-black);
 }
 
 .stats-overlay {
