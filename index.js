@@ -41,65 +41,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    // ---- Hero Slider ----
-    const slides = document.querySelectorAll('.hero-slide');
-    const dots = document.querySelectorAll('.hero-dot');
-    const progressBar = document.getElementById('heroProgressBar');
-    let currentSlide = 0;
-    const totalSlides = slides.length;
-    const slideDuration = 6000; // 6 seconds per slide
-    let slideTimer = null;
-    let progressTimer = null;
-    let progressStart = null;
-
-    function goToSlide(index) {
-        slides.forEach(s => s.classList.remove('active'));
-        dots.forEach(d => d.classList.remove('active'));
-
-        currentSlide = index;
-        slides[currentSlide].classList.add('active');
-        dots[currentSlide].classList.add('active');
-
-        // Reset progress bar
-        startProgress();
-    }
-
-    function nextSlide() {
-        const next = (currentSlide + 1) % totalSlides;
-        goToSlide(next);
-    }
-
-    function startProgress() {
-        if (progressTimer) cancelAnimationFrame(progressTimer);
-        progressStart = performance.now();
-
-        function updateProgress(timestamp) {
-            const elapsed = timestamp - progressStart;
-            const progress = Math.min((elapsed / slideDuration) * 100, 100);
-            progressBar.style.width = progress + '%';
-
-            if (progress < 100) {
-                progressTimer = requestAnimationFrame(updateProgress);
-            } else {
-                nextSlide();
+    // ---- Chairman Hero Parallax ----
+    const chairmanBg = document.querySelector('.chairman-bg');
+    if (chairmanBg) {
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const heroHeight = document.getElementById('hero').offsetHeight;
+            if (scrolled < heroHeight) {
+                const speed = 0.25;
+                chairmanBg.style.transform = `scale(1.05) translateY(${scrolled * speed}px)`;
             }
-        }
-
-        progressTimer = requestAnimationFrame(updateProgress);
+        }, { passive: true });
     }
-
-    // Dot click handlers
-    dots.forEach(dot => {
-        dot.addEventListener('click', () => {
-            const target = parseInt(dot.getAttribute('data-dot'));
-            if (target !== currentSlide) {
-                goToSlide(target);
-            }
-        });
-    });
-
-    // Start the slider
-    startProgress();
 
 
     // ---- Scroll Animations (Intersection Observer) ----
@@ -231,17 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { passive: true });
 
 
-    // ---- Preload hero images ----
-    const heroImages = [
-        'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=1600&q=80',
-        'https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=1600&q=80',
-        'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1600&q=80'
-    ];
-
-    heroImages.forEach(src => {
-        const img = new Image();
-        img.src = src;
-    });
+    // (Hero preload removed — single chairman image loads with the page)
 
     // ---- About Section Scroll Gallery ----
     const aboutGallery = document.getElementById('aboutGallery');
