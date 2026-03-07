@@ -924,6 +924,17 @@ ul {
   transform: translateY(0);
 }
 
+/* ARAR Infra logo fit */
+.showcase-item:last-child .showcase-img-wrap {
+  background: #fff;
+  display: block;
+}
+
+.showcase-item:last-child .showcase-img-wrap img {
+  object-fit: contain;
+  padding: 20px;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .showcase-grid {
