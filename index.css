@@ -68,6 +68,25 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--clean-black);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--deep-red);
+  border-radius: var(--radius-full);
+  border: 2px solid var(--clean-black);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--deep-red-hover);
+}
+
 body {
   font-family: var(--font-family);
   background: var(--clean-black);
