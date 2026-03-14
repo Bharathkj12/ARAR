@@ -574,7 +574,7 @@ ul {
 .btn-primary:hover {
   background: var(--deep-red-hover);
   border-color: var(--deep-red-hover);
-  transform: translateY(-3px) scale(1.02);
+  transform: scale(1.04);
   box-shadow: 0 10px 35px var(--deep-red-glow);
 }
 
@@ -587,7 +587,7 @@ ul {
 .btn-outline:hover {
   border-color: var(--white);
   background: rgba(255, 255, 255, 0.06);
-  transform: translateY(-2px);
+  transform: scale(1.03);
 }
 
 .btn-icon {
@@ -894,7 +894,7 @@ ul {
 }
 
 .showcase-img-wrap:hover {
-  transform: translateY(-12px) scale(1.03);
+  transform: scale(1.05);
   box-shadow: 0 20px 50px rgba(210, 38, 48, 0.2),
     0 10px 30px rgba(0, 0, 0, 0.5);
 }
@@ -1070,7 +1070,7 @@ ul {
 }
 
 .gradient-card:hover {
-  transform: translateY(-8px);
+  transform: scale(1.02);
 }
 
 .gradient-card-border {
@@ -1319,10 +1319,72 @@ ul {
   margin: 0 auto;
 }
 
+.services-carousel-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.services-arrow {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid rgba(139, 26, 26, 0.4);
+  background: rgba(139, 26, 26, 0.1);
+  color: var(--white);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 5;
+}
+
+.services-arrow:hover {
+  background: var(--deep-red);
+  border-color: var(--deep-red);
+  transform: scale(1.1);
+}
+
+.services-arrow svg {
+  width: 22px;
+  height: 22px;
+}
+
+.services-arrow:disabled {
+  opacity: 0.25;
+  cursor: default;
+  pointer-events: none;
+}
+
 .services-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
   gap: 28px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--deep-red) rgba(255, 255, 255, 0.05);
+  padding-bottom: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.services-grid::-webkit-scrollbar {
+  height: 6px;
+}
+
+.services-grid::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+
+.services-grid::-webkit-scrollbar-thumb {
+  background: var(--deep-red);
+  border-radius: 3px;
 }
 
 .service-card {
@@ -1336,6 +1398,8 @@ ul {
   transition: all var(--transition-base);
   overflow: hidden;
   cursor: pointer;
+  flex: 0 0 calc((100% - 56px) / 3);
+  scroll-snap-align: start;
 }
 
 .service-card::before {
@@ -1355,7 +1419,7 @@ ul {
 }
 
 .service-card:hover {
-  transform: translateY(-8px);
+  transform: scale(1.03);
   border-color: rgba(139, 26, 26, 0.3);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
   background: rgba(255, 255, 255, 0.08);
@@ -1540,7 +1604,7 @@ ul {
 }
 
 .timeline-milestone:hover .milestone-content {
-  transform: translateY(-8px);
+  transform: scale(1.05);
   border-color: rgba(210, 38, 48, 0.4);
   background: linear-gradient(135deg, rgba(210, 38, 48, 0.12) 0%, rgba(210, 38, 48, 0.04) 100%);
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 30px rgba(210, 38, 48, 0.15);
@@ -1686,7 +1750,7 @@ ul {
 .all-service-item:hover {
   border-color: rgba(139, 26, 26, 0.3);
   background: rgba(255, 255, 255, 0.06);
-  transform: translateY(-4px);
+  transform: scale(1.02);
 }
 
 .all-service-num {
@@ -1981,7 +2045,7 @@ ul {
   background: transparent;
   color: var(--white);
   border-color: var(--white);
-  transform: translateY(-2px);
+  transform: scale(1.03);
 }
 
 .btn-ghost {
@@ -1993,7 +2057,7 @@ ul {
 .btn-ghost:hover {
   border-color: var(--white);
   background: rgba(255, 255, 255, 0.1);
-  transform: translateY(-2px);
+  transform: scale(1.03);
 }
 
 
@@ -2230,8 +2294,13 @@ ul {
 
 /* Tablet */
 @media (max-width: 1024px) {
-  .services-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .services-grid .service-card {
+    flex: 0 0 calc((100% - 28px) / 2);
+  }
+
+  .services-arrow {
+    width: 40px;
+    height: 40px;
   }
 
   .stats-timeline {
@@ -2370,8 +2439,12 @@ ul {
     background-position: center top;
   }
 
-  .services-grid {
-    grid-template-columns: 1fr;
+  .services-grid .service-card {
+    flex: 0 0 85%;
+  }
+
+  .services-arrow {
+    display: none;
   }
 
   .stats-timeline {

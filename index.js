@@ -332,4 +332,37 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // ---- Services Carousel Navigation ----
+    const servicesGrid = document.getElementById('servicesGrid');
+    const arrowLeft = document.getElementById('servicesArrowLeft');
+    const arrowRight = document.getElementById('servicesArrowRight');
+
+    if (servicesGrid && arrowLeft && arrowRight) {
+        function getCardScrollAmount() {
+            const card = servicesGrid.querySelector('.service-card');
+            if (!card) return 300;
+            const style = getComputedStyle(servicesGrid);
+            const gap = parseInt(style.gap) || 28;
+            return card.offsetWidth + gap;
+        }
+
+        function updateArrows() {
+            const maxScroll = servicesGrid.scrollWidth - servicesGrid.clientWidth;
+            arrowLeft.disabled = servicesGrid.scrollLeft <= 5;
+            arrowRight.disabled = servicesGrid.scrollLeft >= maxScroll - 5;
+        }
+
+        arrowLeft.addEventListener('click', () => {
+            servicesGrid.scrollBy({ left: -getCardScrollAmount(), behavior: 'smooth' });
+        });
+
+        arrowRight.addEventListener('click', () => {
+            servicesGrid.scrollBy({ left: getCardScrollAmount(), behavior: 'smooth' });
+        });
+
+        servicesGrid.addEventListener('scroll', updateArrows, { passive: true });
+        window.addEventListener('resize', updateArrows);
+        updateArrows();
+    }
+
 });
