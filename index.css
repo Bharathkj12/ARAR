@@ -404,6 +404,160 @@ ul {
 
 
 /* ============================================
+   LOGO INTRO SECTION
+   ============================================ */
+.logo-intro-section {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #000000;
+}
+
+
+
+/* ---- Droplets ---- */
+.logo-intro-droplets {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.droplet {
+  position: absolute;
+  left: var(--dx);
+  top: var(--dy);
+  width: var(--sz);
+  height: var(--sz);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(255, 200, 200, 0.6) 50%, transparent 100%);
+  opacity: 0;
+  animation: dropletFloat var(--dur) ease-in-out var(--del) infinite;
+  box-shadow: 0 0 calc(var(--sz) * 2) rgba(255, 255, 255, 0.5),
+    0 0 calc(var(--sz) * 4) rgba(255, 120, 120, 0.3);
+  filter: blur(0.3px);
+}
+
+@keyframes dropletFloat {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.6);
+  }
+
+  15% {
+    opacity: var(--op);
+  }
+
+  50% {
+    opacity: calc(var(--op) * 0.8);
+    transform: translate(28px, -65px) scale(1.2);
+  }
+
+  85% {
+    opacity: calc(var(--op) * 0.3);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(55px, -140px) scale(0.3);
+  }
+}
+
+/* ---- Content container ---- */
+.logo-intro-content {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  animation: introContentFadeIn 1.2s var(--ease-out) 0.3s both;
+}
+
+@keyframes introContentFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---- 3D logo video wrapper (circular crop) ---- */
+.logo-3d-wrap {
+  width: clamp(160px, 22vw, 280px);
+  height: clamp(160px, 22vw, 280px);
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  box-shadow:
+    0 0 0 4px rgba(255, 255, 255, 0.15),
+    0 0 50px rgba(255, 80, 80, 0.5),
+    0 0 100px rgba(180, 0, 0, 0.3);
+  animation: logoPulseGlow 3s ease-in-out infinite alternate;
+  flex-shrink: 0;
+}
+
+@keyframes logoPulseGlow {
+  0% {
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.12), 0 0 50px rgba(255, 80, 80, 0.4), 0 0 100px rgba(180, 0, 0, 0.25);
+  }
+
+  100% {
+    box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.20), 0 0 80px rgba(255, 80, 80, 0.65), 0 0 160px rgba(180, 0, 0, 0.4);
+  }
+}
+
+.logo-3d-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* ---- Brand text ---- */
+.logo-intro-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+  gap: 6px;
+}
+
+.logo-intro-main {
+  font-family: var(--font-family);
+  font-size: clamp(2.8rem, 7vw, 6rem);
+  font-weight: 900;
+  letter-spacing: clamp(6px, 2vw, 20px);
+  color: #ffffff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), 0 0 40px rgba(255, 120, 120, 0.5);
+  text-transform: uppercase;
+}
+
+.logo-intro-sub {
+  font-family: var(--font-family);
+  font-size: clamp(1rem, 2.5vw, 2rem);
+  font-weight: 400;
+  letter-spacing: clamp(8px, 3vw, 28px);
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  text-transform: uppercase;
+}
+
+
+/* ============================================
    HERO SLIDER
    ============================================ */
 .hero {
