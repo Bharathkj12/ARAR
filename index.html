@@ -112,6 +112,94 @@
     </div>
   </section>
 
+
+  <!-- ============ SUBSIDIARIES RADIAL FLOW ============ -->
+  <section class="section subsidiaries-flow-section" id="showcase">
+    <div class="container">
+      <div class="subsidiaries-header fade-in">
+        <span class="section-tag"><span class="line"></span> Our Subsidiaries <span class="line"></span></span>
+        <h2 class="section-title">The ARAR Group Companies</h2>
+      </div>
+
+      <!-- Radial Flow Diagram -->
+      <div class="radial-flow-wrapper fade-in">
+        <!-- SVG connector lines drawn by JS -->
+        <svg class="radial-flow-svg" id="radialFlowSvg" aria-hidden="true"></svg>
+
+        <!-- Root Node: ARAR GROUP -->
+        <div class="rf-node rf-root" id="rfRoot">
+          <div class="rf-node-inner">
+            <img src="ARAR.png" alt="ARAR Group" class="rf-root-logo">
+            <span class="rf-root-label">ARAR<br><strong>GROUP</strong></span>
+          </div>
+          <div class="rf-pulse-ring"></div>
+          <div class="rf-pulse-ring rf-pulse-ring--2"></div>
+        </div>
+
+        <!-- Child Nodes -->
+        <div class="rf-children">
+
+          <!-- ARAR Utility -->
+          <div class="rf-node rf-child rf-utility" id="rfUtility" data-branch="utility">
+            <div class="rf-node-inner">
+              <div class="rf-child-icon rf-icon-utility">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                </svg>
+              </div>
+              <div class="rf-child-logo-wrap">
+                <img src="img/companies/new arar logo.jpg" alt="ARAR Utility" class="rf-child-logo">
+              </div>
+              <span class="rf-child-label">ARAR Utility</span>
+              <span class="rf-child-desc">EPC Electrical &amp; Power</span>
+            </div>
+            <canvas class="rf-electric-canvas" id="electricCanvas"></canvas>
+          </div>
+
+          <!-- ARAR Petrochemical -->
+          <div class="rf-node rf-child rf-petro" id="rfPetro" data-branch="petro">
+            <div class="rf-node-inner">
+              <div class="rf-child-icon rf-icon-petro">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+                  <path d="M2 12h6M10 12h6M18 12h4" />
+                  <circle cx="8" cy="12" r="2" />
+                  <circle cx="16" cy="12" r="2" />
+                  <path d="M6 6v4M18 6v4M6 14v4M18 14v4" />
+                </svg>
+              </div>
+              <div class="rf-child-logo-wrap rf-petro-logo-wrap">
+                <img src="img/companies/PETROCHEM.png" alt="ARAR Petrochemical" class="rf-child-logo rf-petro-logo">
+              </div>
+              <span class="rf-child-label">ARAR Petrochemical</span>
+              <span class="rf-child-desc">Piping &amp; Process Plants</span>
+            </div>
+          </div>
+
+          <!-- ARAR Infra -->
+          <div class="rf-node rf-child rf-infra" id="rfInfra" data-branch="infra">
+            <a href="https://www.ararinfra.com/" target="_blank" rel="noopener noreferrer"
+              class="rf-node-inner rf-node-inner--link">
+              <div class="rf-child-icon rf-icon-infra">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4" />
+                  <path d="M9 9h1M9 13h1M9 17h1" />
+                </svg>
+              </div>
+              <div class="rf-child-logo-wrap">
+                <img src="img/companies/infra.png" alt="ARAR Infra" class="rf-child-logo">
+              </div>
+              <span class="rf-child-label">ARAR Infra</span>
+              <span class="rf-child-desc">Civil &amp; Road Works ↗</span>
+            </a>
+          </div>
+
+        </div><!-- /.rf-children -->
+      </div><!-- /.radial-flow-wrapper -->
+    </div>
+  </section>
+
+
   <!-- ============ HERO — CHAIRMAN ============ -->
   <section class="hero" id="hero">
     <!-- Floating Particles -->
@@ -162,64 +250,6 @@
     <!-- Vertical accent line -->
     <div class="hero-accent-line"></div>
 
-  </section>
-
-
-  <!-- ============ IMAGE SHOWCASE — HOVER POP ============ -->
-  <section class="section image-showcase" id="showcase">
-    <div class="container">
-      <div class="showcase-header fade-in" style="text-align: center; margin-bottom: 3rem;">
-        <span class="section-tag"><span class="line"></span> Our Subsidiaries <span class="line"></span></span>
-        <h2 class="section-title">The ARAR Group Companies</h2>
-      </div>
-      <div class="showcase-grid">
-        <div class="showcase-item fade-in">
-          <div class="gradient-card" style="padding: 2px; height: 100%;">
-            <div class="gradient-card-border" style="animation-duration: 4s;"></div>
-            <div class="gradient-card-content" style="padding: 0; overflow: hidden; height: 100%;">
-              <div class="showcase-img-wrap"
-                style="border-radius: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #fff;">
-                <img src="img/companies/new arar logo.jpg" alt="ARAR Utility"
-                  style="max-height: 120px; width: auto; aspect-ratio: auto;">
-                <div class="showcase-overlay">
-                  <span class="showcase-label">ARAR Utility</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="showcase-item fade-in" style="transition-delay: 0.15s">
-          <div class="gradient-card" style="padding: 2px; height: 100%;">
-            <div class="gradient-card-border" style="animation-duration: 5s;"></div>
-            <div class="gradient-card-content" style="padding: 0; overflow: hidden; height: 100%;">
-              <div class="showcase-img-wrap"
-                style="border-radius: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #fff;">
-                <img src="img/companies/PETROCHEM.png" alt="ARAR Petrochemical"
-                  style="width: 100%; height: 100%; object-fit: contain;">
-                <div class="showcase-overlay">
-                  <span class="showcase-label">ARAR Petrochemical</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="showcase-item fade-in" style="transition-delay: 0.3s">
-          <div class="gradient-card" style="padding: 2px; height: 100%;">
-            <div class="gradient-card-border" style="animation-duration: 4s;"></div>
-            <div class="gradient-card-content" style="padding: 0; overflow: hidden; height: 100%;">
-              <a href="https://www.ararinfra.com/" target="_blank" rel="noopener noreferrer" class="showcase-img-wrap"
-                style="border-radius: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #fff;">
-                <img src="img/companies/infra.png" alt="ARAR Infra"
-                  style="max-height: 120px; width: auto; aspect-ratio: auto;">
-                <div class="showcase-overlay">
-                  <span class="showcase-label">Visit ARAR Infra</span>
-                </div>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   </section>
 
 

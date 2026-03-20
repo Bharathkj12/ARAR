@@ -579,5 +579,161 @@ document.addEventListener('DOMContentLoaded', () => {
         requestAnimationFrame(draw);
     })();
 
+
+    // ---- Subsidiaries Radial Flow Diagram ----
+    (function initRadialFlow() {
+        const svg = document.getElementById('radialFlowSvg');
+        const root = document.getElementById('rfRoot');
+        const children = document.querySelectorAll('.rf-child');
+        if (!svg || !root || !children.length) return;
+
+        const branchColors = { utility: '#ffc832', petro: '#50a0ff', infra: '#50dc82' };
+        let flowPaths = [];
+
+        function getBBox(el) {
+            const wRect = svg.getBoundingClientRect();
+            const r = el.getBoundingClientRect();
+            return { left: r.left - wRect.left, top: r.top - wRect.top, w: r.width, h: r.height };
+        }
+
+        function rightMid(el) { const b = getBBox(el); return { x: b.left + b.w, y: b.top + b.h / 2 }; }
+        function leftMid(el) { const b = getBBox(el); return { x: b.left, y: b.top + b.h / 2 }; }
+
+        function cubicD(x1, y1, x2, y2) {
+            const cx = x1 + (x2 - x1) * 0.6;
+            return `M${x1},${y1} C${cx},${y1} ${cx},${y2} ${x2},${y2}`;
+        }
+
+        function mkel(tag, attrs) {
+            const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+            for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
+            return el;
+        }
+
+        function drawConnectors() {
+            while (svg.firstChild) svg.removeChild(svg.firstChild);
+            flowPaths = [];
+
+            // Check if wrapper is in column layout (mobile)
+            const wrapper = document.querySelector('.radial-flow-wrapper');
+            if (!wrapper || getComputedStyle(wrapper).flexDirection === 'column') return;
+
+            const from = rightMid(root);
+
+            children.forEach((child, i) => {
+                const branch = child.dataset.branch;
+                const color = branchColors[branch] || '#D22630';
+                const to = leftMid(child);
+                const d = cubicD(from.x, from.y, to.x, to.y);
+
+                // Base dim track
+                svg.appendChild(mkel('path', { d, fill: 'none', stroke: 'rgba(255,255,255,0.07)', 'stroke-width': '2', 'stroke-linecap': 'round' }));
+                // Coloured glow
+                svg.appendChild(mkel('path', { d, fill: 'none', stroke: color, 'stroke-width': '2', opacity: '0.2', 'stroke-linecap': 'round' }));
+                // Flowing pulse dash
+                const pulse = mkel('path', { d, fill: 'none', stroke: color, 'stroke-width': '3', 'stroke-linecap': 'round', 'stroke-dasharray': '16 400', 'stroke-dashoffset': '400', opacity: '0.9' });
+                svg.appendChild(pulse);
+                flowPaths.push({ el: pulse, branch, color, offset: 400 - i * 133 });
+            });
+        }
+
+        let lastTs2;
+        function animateFlow(ts) {
+            if (!lastTs2) lastTs2 = ts;
+            const dt = ts - lastTs2;
+            lastTs2 = ts;
+            flowPaths.forEach(p => {
+                p.offset -= dt * 0.35;
+                if (p.offset < -16) p.offset = 416;
+                p.el.setAttribute('stroke-dashoffset', p.offset.toFixed(1));
+            });
+            requestAnimationFrame(animateFlow);
+        }
+
+        function setupBranchHover() {
+            children.forEach((child, i) => {
+                child.addEventListener('mouseenter', () => {
+                    if (flowPaths[i]) { flowPaths[i].el.setAttribute('stroke-width', '5'); flowPaths[i].el.setAttribute('opacity', '1'); }
+                    const all = svg.querySelectorAll('path');
+                    const gi = i * 3 + 1;
+                    if (all[gi]) { all[gi].setAttribute('opacity', '0.65'); all[gi].setAttribute('stroke-width', '4'); }
+                });
+                child.addEventListener('mouseleave', () => {
+                    if (flowPaths[i]) { flowPaths[i].el.setAttribute('stroke-width', '3'); flowPaths[i].el.setAttribute('opacity', '0.9'); }
+                    const all = svg.querySelectorAll('path');
+                    const gi = i * 3 + 1;
+                    if (all[gi]) { all[gi].setAttribute('opacity', '0.2'); all[gi].setAttribute('stroke-width', '2'); }
+                });
+            });
+        }
+
+        let rfTimer;
+        window.addEventListener('resize', () => { clearTimeout(rfTimer); rfTimer = setTimeout(drawConnectors, 150); });
+
+        drawConnectors();
+        requestAnimationFrame(animateFlow);
+        setupBranchHover();
+        setTimeout(drawConnectors, 500);
+        setTimeout(drawConnectors, 1200);
+
+
+        // ---- Electricity Crackle on ARAR Utility hover ----
+        const utilityNode = document.getElementById('rfUtility');
+        const elecCanvas = document.getElementById('electricCanvas');
+        if (!utilityNode || !elecCanvas) return;
+        const ectx = elecCanvas.getContext('2d');
+        let elecActive = false, elecTimer;
+
+        function sizeElec() {
+            elecCanvas.width = utilityNode.offsetWidth;
+            elecCanvas.height = utilityNode.offsetHeight;
+        }
+        sizeElec();
+        window.addEventListener('resize', sizeElec);
+
+        function bolt(ctx, x1, y1, x2, y2, r, d) {
+            if (d === 0) { ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); return; }
+            const mx = (x1 + x2) / 2 + (Math.random() - 0.5) * r;
+            const my = (y1 + y2) / 2 + (Math.random() - 0.5) * r;
+            bolt(ctx, x1, y1, mx, my, r * 0.55, d - 1);
+            bolt(ctx, mx, my, x2, y2, r * 0.55, d - 1);
+            if (d > 2 && Math.random() < 0.38) {
+                const bx = mx + (Math.random() - 0.5) * r * 0.7, by = my + (Math.random() - 0.5) * r * 0.7;
+                bolt(ctx, mx, my, bx, by, r * 0.4, d - 2);
+            }
+        }
+
+        function renderElec() {
+            if (!elecActive) { ectx.clearRect(0, 0, elecCanvas.width, elecCanvas.height); return; }
+            ectx.clearRect(0, 0, elecCanvas.width, elecCanvas.height);
+            const n = Math.random() < 0.5 ? 1 : 2;
+            for (let b = 0; b < n; b++) {
+                const sx = Math.random() * elecCanvas.width, sy = 0;
+                const ex = Math.random() * elecCanvas.width, ey = elecCanvas.height;
+                ectx.globalCompositeOperation = 'lighter';
+                // Glow pass
+                ectx.strokeStyle = 'rgba(255,215,0,0.2)';
+                ectx.lineWidth = 5;
+                ectx.filter = 'blur(7px)';
+                ectx.beginPath(); bolt(ectx, sx, sy, ex, ey, 75, 4); ectx.stroke();
+                // Core pass
+                ectx.strokeStyle = 'rgba(255,255,190,0.9)';
+                ectx.lineWidth = 1.2;
+                ectx.filter = 'none';
+                ectx.beginPath(); bolt(ectx, sx, sy, ex, ey, 75, 4); ectx.stroke();
+                ectx.globalCompositeOperation = 'source-over';
+            }
+            elecTimer = setTimeout(renderElec, 55 + Math.random() * 80);
+        }
+
+        utilityNode.addEventListener('mouseenter', () => { elecActive = true; renderElec(); });
+        utilityNode.addEventListener('mouseleave', () => {
+            elecActive = false;
+            clearTimeout(elecTimer);
+            ectx.clearRect(0, 0, elecCanvas.width, elecCanvas.height);
+        });
+
+    })();
+
 });
 

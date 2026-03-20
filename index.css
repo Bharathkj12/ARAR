@@ -972,115 +972,360 @@ ul {
 }
 
 
+
 /* ============================================
-   IMAGE SHOWCASE — HOVER POP
+   OUR SUBSIDIARIES — RADIAL FLOW DIAGRAM
    ============================================ */
-.image-showcase {
-  padding: clamp(40px, 5vw, 80px) 0;
+.subsidiaries-flow-section {
+  padding: clamp(60px, 7vw, 120px) 0;
   background: var(--clean-black);
-}
-
-.showcase-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(16px, 2.5vw, 32px);
-}
-
-.showcase-item {
-  position: relative;
-  border-radius: var(--radius-md);
   overflow: hidden;
-}
-
-.showcase-img-wrap {
   position: relative;
-  overflow: hidden;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
-    box-shadow 0.45s var(--ease-out);
 }
 
-.showcase-img-wrap img {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.5s var(--ease-out);
+.subsidiaries-header {
+  text-align: center;
+  margin-bottom: clamp(48px, 6vw, 80px);
 }
 
-.showcase-img-wrap:hover {
-  transform: scale(1.05);
-  box-shadow: 0 20px 50px rgba(210, 38, 48, 0.2),
-    0 10px 30px rgba(0, 0, 0, 0.5);
+/* ── Wrapper: positions SVG + nodes together ── */
+.radial-flow-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0;
+  min-height: 420px;
 }
 
-.showcase-img-wrap:hover img {
-  transform: scale(1.08);
-}
-
-/* Overlay that appears on hover */
-.showcase-overlay {
+/* ── Overlay SVG for connector curves ── */
+.radial-flow-svg {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top,
-      rgba(13, 13, 13, 0.75) 0%,
-      rgba(13, 13, 13, 0.15) 50%,
-      transparent 100%);
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  padding-bottom: 24px;
-  opacity: 0;
-  transition: opacity 0.4s var(--ease-out);
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 1;
 }
 
-.showcase-img-wrap:hover .showcase-overlay {
+/* ── ROOT NODE ── */
+.rf-root {
+  position: relative;
+  z-index: 3;
+  flex-shrink: 0;
+}
+
+.rf-node-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  background: linear-gradient(145deg, #1c1c1c, #111);
+  border: 2px solid rgba(210, 38, 48, 0.5);
+  border-radius: 50%;
+  width: 140px;
+  height: 140px;
+  justify-content: center;
+  box-shadow:
+    0 0 0 6px rgba(210, 38, 48, 0.08),
+    0 0 40px rgba(210, 38, 48, 0.2),
+    0 12px 40px rgba(0, 0, 0, 0.6);
+  transition: box-shadow 0.4s ease, border-color 0.4s ease;
+}
+
+.rf-root .rf-node-inner {
+  width: 160px;
+  height: 160px;
+  border-width: 3px;
+  border-color: var(--deep-red);
+  box-shadow:
+    0 0 0 8px rgba(210, 38, 48, 0.1),
+    0 0 60px rgba(210, 38, 48, 0.35),
+    0 16px 50px rgba(0, 0, 0, 0.7);
+}
+
+.rf-root-logo {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px rgba(210, 38, 48, 0.5));
+}
+
+.rf-root-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.2;
+}
+
+.rf-root-label strong {
+  color: var(--deep-red);
+  font-weight: 900;
+  letter-spacing: 3px;
+}
+
+/* Pulse rings on root */
+.rf-pulse-ring {
+  position: absolute;
+  inset: -12px;
+  border-radius: 50%;
+  border: 2px solid rgba(210, 38, 48, 0.35);
+  animation: rfPulse 2.4s ease-out infinite;
+  pointer-events: none;
+}
+
+.rf-pulse-ring--2 {
+  inset: -22px;
+  border-color: rgba(210, 38, 48, 0.15);
+  animation-delay: 0.8s;
+}
+
+@keyframes rfPulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+
+  100% {
+    transform: scale(1.18);
+    opacity: 0;
+  }
+}
+
+/* ── CHILDREN container ── */
+.rf-children {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(24px, 4vw, 48px);
+  margin-left: auto;
+  position: relative;
+  z-index: 3;
+}
+
+/* ── CHILD NODE base ── */
+.rf-child {
+  position: relative;
+}
+
+.rf-child .rf-node-inner {
+  width: clamp(200px, 22vw, 260px);
+  height: auto;
+  border-radius: var(--radius-lg);
+  padding: 22px 20px;
+  gap: 12px;
+  border-color: rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.35s ease,
+    border-color 0.35s ease;
+}
+
+.rf-child .rf-node-inner:hover,
+.rf-child:hover .rf-node-inner {
+  transform: translateY(-6px) scale(1.03);
+  border-color: rgba(210, 38, 48, 0.55);
+  box-shadow:
+    0 0 0 4px rgba(210, 38, 48, 0.08),
+    0 0 40px rgba(210, 38, 48, 0.25),
+    0 16px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* inner link variant (for Infra) */
+.rf-node-inner--link {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ── Icon badge ── */
+.rf-child-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(210, 38, 48, 0.12);
+  border: 1px solid rgba(210, 38, 48, 0.25);
+  flex-shrink: 0;
+}
+
+.rf-child-icon svg {
+  width: 22px;
+  height: 22px;
+  stroke: var(--deep-red);
+}
+
+/* Per-branch icon accent */
+.rf-icon-utility {
+  background: rgba(255, 200, 50, 0.1);
+  border-color: rgba(255, 200, 50, 0.28);
+}
+
+.rf-icon-utility svg {
+  stroke: #ffc832;
+}
+
+.rf-icon-petro {
+  background: rgba(80, 160, 255, 0.1);
+  border-color: rgba(80, 160, 255, 0.28);
+}
+
+.rf-icon-petro svg {
+  stroke: #50a0ff;
+}
+
+.rf-icon-infra {
+  background: rgba(80, 220, 130, 0.1);
+  border-color: rgba(80, 220, 130, 0.28);
+}
+
+.rf-icon-infra svg {
+  stroke: #50dc82;
+}
+
+/* ── Logo inside child card ── */
+.rf-child-logo-wrap {
+  width: 100%;
+  height: 70px;
+  background: #fff;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.rf-child-logo {
+  max-height: 60px;
+  max-width: 90%;
+  object-fit: contain;
+}
+
+.rf-petro-logo-wrap {
+  padding: 4px;
+}
+
+.rf-petro-logo {
+  max-height: 58px;
+}
+
+/* Labels */
+.rf-child-label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: 0.5px;
+}
+
+.rf-child-desc {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
+
+/* ── Utility node: electricity canvas overlay ── */
+.rf-electric-canvas {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-lg);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.rf-utility:hover .rf-electric-canvas {
   opacity: 1;
 }
 
-.showcase-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--deep-red);
-  color: var(--white);
-  font-size: var(--fs-xs);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  padding: 10px 24px;
-  border-radius: var(--radius-full);
-  transform: translateY(20px);
-  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+/* ── SVG path base styles (set by JS) ── */
+.rf-branch-path {
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
-.showcase-img-wrap:hover .showcase-label {
-  transform: translateY(0);
+.rf-branch-base {
+  stroke: rgba(255, 255, 255, 0.08);
 }
 
-/* ARAR Infra logo fit */
-.showcase-item:last-child .showcase-img-wrap {
-  background: #fff;
-  display: block;
+/* Flowing dot animation along paths */
+@keyframes rfFlowDot {
+  0% {
+    stroke-dashoffset: 500;
+  }
+
+  100% {
+    stroke-dashoffset: 0;
+  }
 }
 
-.showcase-item:last-child .showcase-img-wrap img {
-  object-fit: contain;
-  padding: 20px;
+/* Electricity pulse animation along the path */
+@keyframes rfElecPulse {
+  0% {
+    stroke-dashoffset: 600;
+    opacity: 0;
+  }
+
+  5% {
+    opacity: 1;
+  }
+
+  95% {
+    opacity: 1;
+  }
+
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .showcase-grid {
-    grid-template-columns: 1fr;
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .radial-flow-wrapper {
+    flex-direction: column;
+    align-items: center;
+    min-height: auto;
+    padding-bottom: 16px;
+  }
+
+  .rf-root {
+    margin-bottom: clamp(32px, 5vw, 60px);
+  }
+
+  .rf-children {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-left: 0;
     gap: 20px;
   }
 
+  .rf-child .rf-node-inner {
+    width: clamp(160px, 40vw, 210px);
+  }
 
+  .radial-flow-svg {
+    display: none;
+  }
 }
 
+@media (max-width: 480px) {
+  .rf-children {
+    flex-direction: column;
+    align-items: center;
+  }
 
+  .rf-child .rf-node-inner {
+    width: min(280px, 88vw);
+  }
+}
 
 
 /* ============================================
