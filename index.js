@@ -735,5 +735,93 @@ document.addEventListener('DOMContentLoaded', () => {
 
     })();
 
+
+    // ---- Zoom-Into-Logo Transition ----
+    (function initZoomTransition() {
+        const introSection = document.getElementById('logo-intro');
+        const logoWrap = document.getElementById('logo3dWrap');
+        const overlay = document.getElementById('zoomOverlay');
+        const nextSection = document.getElementById('showcase');
+
+        if (!introSection || !logoWrap || !overlay || !nextSection) return;
+
+        let isTransitioning = false;
+        let hasTransitioned = false;
+
+        function triggerZoom() {
+            if (isTransitioning || hasTransitioned) return;
+            if (window.scrollY > 20) return;
+
+            isTransitioning = true;
+            document.body.style.overflow = 'hidden';
+
+            introSection.classList.add('zoom-transitioning');
+            logoWrap.style.animation = 'none';
+            void logoWrap.offsetHeight; // force reflow
+
+            // Scale up — "fall into" the logo
+            logoWrap.style.transform = 'scale(18)';
+
+            // Black overlay fades in partway through the zoom
+            setTimeout(() => { overlay.classList.add('visible'); }, 480);
+
+            // After zoom peak: jump to section 2 and reset everything
+            setTimeout(() => {
+                hasTransitioned = true;
+
+                nextSection.scrollIntoView({ behavior: 'instant', block: 'start' });
+
+                // Reset logo state silently under the black overlay
+                introSection.classList.remove('zoom-transitioning');
+                logoWrap.style.transition = 'none';
+                logoWrap.style.transform = '';
+                logoWrap.style.animation = '';
+                logoWrap.style.borderRadius = '';
+                document.body.style.overflow = '';
+
+                // Reveal section 2 by fading overlay away
+                requestAnimationFrame(() => { overlay.classList.remove('visible'); });
+
+                isTransitioning = false;
+            }, 920);
+        }
+
+        // Reset state when user scrolls back to top
+        window.addEventListener('scroll', () => {
+            if (window.scrollY < 5) {
+                hasTransitioned = false;
+                logoWrap.style.transition = 'none';
+                logoWrap.style.transform = '';
+                logoWrap.style.animation = '';
+                logoWrap.style.borderRadius = '';
+                introSection.classList.remove('zoom-transitioning');
+                overlay.classList.remove('visible');
+            }
+        }, { passive: true });
+
+        // Mouse wheel / trackpad
+        introSection.addEventListener('wheel', (e) => {
+            if (hasTransitioned || isTransitioning || window.scrollY > 20) return;
+            if (e.deltaY > 0) { e.preventDefault(); triggerZoom(); }
+        }, { passive: false });
+
+        // Touch swipe up
+        let touchStartY = 0;
+        introSection.addEventListener('touchstart', (e) => {
+            touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+        introSection.addEventListener('touchmove', (e) => {
+            if (hasTransitioned || isTransitioning || window.scrollY > 20) return;
+            if (touchStartY - e.touches[0].clientY > 30) { e.preventDefault(); triggerZoom(); }
+        }, { passive: false });
+
+        // Keyboard: Arrow Down, Page Down, Space
+        document.addEventListener('keydown', (e) => {
+            if (hasTransitioned || isTransitioning || window.scrollY > 20) return;
+            if (['ArrowDown', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); triggerZoom(); }
+        });
+
+    })();
+
 });
 

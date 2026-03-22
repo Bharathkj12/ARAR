@@ -100,15 +100,24 @@
     <!-- Animated light droplets -->
     <canvas class="logo-intro-droplets" id="logoDroplets"></canvas>
 
+    <!-- Zoom-to-next overlay (black flash) -->
+    <div id="zoomOverlay"></div>
+
     <!-- Content -->
     <div class="logo-intro-content">
-      <div class="logo-3d-wrap">
+      <div class="logo-3d-wrap" id="logo3dWrap">
         <video class="logo-3d-video" src="3d-logo.mp4" autoplay muted loop playsinline></video>
       </div>
-      <div class="logo-intro-brand">
+      <div class="logo-intro-brand" id="logoBrand">
         <span class="logo-intro-main">ARAR</span>
         <span class="logo-intro-sub">GROUP</span>
       </div>
+    </div>
+
+    <!-- Scroll hint -->
+    <div class="zoom-scroll-hint" id="zoomScrollHint">
+      <span>Scroll to explore</span>
+      <div class="zoom-scroll-arrow"></div>
     </div>
   </section>
 
