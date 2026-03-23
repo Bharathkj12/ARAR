@@ -1319,19 +1319,6 @@ ul {
   letter-spacing: 0.5px;
 }
 
-/* ── Utility node: electricity canvas overlay ── */
-.rf-electric-canvas {
-  position: absolute;
-  inset: 0;
-  border-radius: var(--radius-lg);
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-.rf-utility:hover .rf-electric-canvas {
-  opacity: 1;
-}
 
 /* ── SVG path base styles (set by JS) ── */
 .rf-branch-path {

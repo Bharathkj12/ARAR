@@ -677,62 +677,6 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(drawConnectors, 1200);
 
 
-        // ---- Electricity Crackle on ARAR Utility hover ----
-        const utilityNode = document.getElementById('rfUtility');
-        const elecCanvas = document.getElementById('electricCanvas');
-        if (!utilityNode || !elecCanvas) return;
-        const ectx = elecCanvas.getContext('2d');
-        let elecActive = false, elecTimer;
-
-        function sizeElec() {
-            elecCanvas.width = utilityNode.offsetWidth;
-            elecCanvas.height = utilityNode.offsetHeight;
-        }
-        sizeElec();
-        window.addEventListener('resize', sizeElec);
-
-        function bolt(ctx, x1, y1, x2, y2, r, d) {
-            if (d === 0) { ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); return; }
-            const mx = (x1 + x2) / 2 + (Math.random() - 0.5) * r;
-            const my = (y1 + y2) / 2 + (Math.random() - 0.5) * r;
-            bolt(ctx, x1, y1, mx, my, r * 0.55, d - 1);
-            bolt(ctx, mx, my, x2, y2, r * 0.55, d - 1);
-            if (d > 2 && Math.random() < 0.38) {
-                const bx = mx + (Math.random() - 0.5) * r * 0.7, by = my + (Math.random() - 0.5) * r * 0.7;
-                bolt(ctx, mx, my, bx, by, r * 0.4, d - 2);
-            }
-        }
-
-        function renderElec() {
-            if (!elecActive) { ectx.clearRect(0, 0, elecCanvas.width, elecCanvas.height); return; }
-            ectx.clearRect(0, 0, elecCanvas.width, elecCanvas.height);
-            const n = Math.random() < 0.5 ? 1 : 2;
-            for (let b = 0; b < n; b++) {
-                const sx = Math.random() * elecCanvas.width, sy = 0;
-                const ex = Math.random() * elecCanvas.width, ey = elecCanvas.height;
-                ectx.globalCompositeOperation = 'lighter';
-                // Glow pass
-                ectx.strokeStyle = 'rgba(255,215,0,0.2)';
-                ectx.lineWidth = 5;
-                ectx.filter = 'blur(7px)';
-                ectx.beginPath(); bolt(ectx, sx, sy, ex, ey, 75, 4); ectx.stroke();
-                // Core pass
-                ectx.strokeStyle = 'rgba(255,255,190,0.9)';
-                ectx.lineWidth = 1.2;
-                ectx.filter = 'none';
-                ectx.beginPath(); bolt(ectx, sx, sy, ex, ey, 75, 4); ectx.stroke();
-                ectx.globalCompositeOperation = 'source-over';
-            }
-            elecTimer = setTimeout(renderElec, 55 + Math.random() * 80);
-        }
-
-        utilityNode.addEventListener('mouseenter', () => { elecActive = true; renderElec(); });
-        utilityNode.addEventListener('mouseleave', () => {
-            elecActive = false;
-            clearTimeout(elecTimer);
-            ectx.clearRect(0, 0, elecCanvas.width, elecCanvas.height);
-        });
-
     })();
 
 
