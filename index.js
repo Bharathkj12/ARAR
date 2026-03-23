@@ -241,7 +241,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // ---- RadiusOnScroll Effect ----
         const startRadius = 0;    // starts sharp / full-bleed
         const endRadius = 48;     // rounds to 48px
-        const galleryTrack = document.getElementById('aboutGalleryTrack');
 
         function updateRadiusOnScroll() {
             const rect = aboutGallery.getBoundingClientRect();
