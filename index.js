@@ -348,8 +348,8 @@ document.addEventListener('DOMContentLoaded', () => {
             cableBase: [20, 20, 20],  // Almost black matte rubber
             cableHighlight: [70, 70, 70], // Light reflection on rubber
             cableGroove: [10, 10, 10], // Deep shadows for ribbed texture
-            elecCore: [255, 255, 255],// White-hot core
-            elecGlow: [0, 150, 255]   // Intense cyan/blue high-voltage arc
+            elecCore: [180, 220, 255],// Softer, pale blue core (less bright white)
+            elecGlow: [0, 80, 180]    // Deeper, less intense cyan/blue glow
         };
 
         function resize() {
