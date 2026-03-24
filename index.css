@@ -608,7 +608,7 @@ ul {
   font-weight: 900;
   letter-spacing: clamp(6px, 2vw, 20px);
   color: #ffffff;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), 0 0 40px rgba(255, 120, 120, 0.5);
+  text-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
   text-transform: uppercase;
 }
 
@@ -617,7 +617,7 @@ ul {
   font-size: clamp(1rem, 2.5vw, 2rem);
   font-weight: 400;
   letter-spacing: clamp(8px, 3vw, 28px);
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--deep-red);
   text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
   text-transform: uppercase;
 }
