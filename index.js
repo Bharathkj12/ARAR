@@ -508,43 +508,38 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (surgePts.length > 1) {
                         ctx.globalCompositeOperation = 'lighter';
 
-                        // Wide ambient glow
+                        // Wide glow
                         ctx.beginPath();
                         ctx.moveTo(surgePts[0].x, surgePts[0].y);
                         for (let i = 1; i < surgePts.length; i++) ctx.lineTo(surgePts[i].x, surgePts[i].y);
-                        ctx.strokeStyle = rgba(CFG.elecGlow, 0.4);
-                        ctx.lineWidth = c.thickness * 3;
-                        ctx.filter = 'blur(20px)';
+                        ctx.strokeStyle = rgba(CFG.elecGlow, 0.6);
+                        ctx.lineWidth = c.thickness * 2.5;
+                        ctx.filter = 'blur(12px)';
                         ctx.stroke();
 
-                        // Arcing lightning bolts snapping along the cable
-                        ctx.filter = 'drop-shadow(0 0 8px rgba(0, 150, 255, 0.8))';
+                        // Inner glow
+                        ctx.beginPath();
+                        ctx.moveTo(surgePts[0].x, surgePts[0].y);
+                        for (let i = 1; i < surgePts.length; i++) ctx.lineTo(surgePts[i].x, surgePts[i].y);
+                        ctx.strokeStyle = rgba(CFG.elecGlow, 0.9);
+                        ctx.lineWidth = c.thickness * 1.2;
+                        ctx.filter = 'blur(4px)';
+                        ctx.stroke();
 
-                        // Draw several jagged arcs
-                        for (let arcOffset = -1; arcOffset <= 1; arcOffset += 2) {
-                            ctx.beginPath();
-                            ctx.strokeStyle = rgba(CFG.elecCore, 0.9);
-                            ctx.lineWidth = 2 + Math.random() * 2;
-
-                            let px = surgePts[0].x;
-                            let py = surgePts[0].y;
-                            ctx.moveTo(px, py);
-
-                            for (let i = 1; i < surgePts.length; i += 2) {
-                                const p = surgePts[i];
-                                // Jitter perpendicular to the cable for arcing effect
-                                // The arc clings to the edges of the cable mostly
-                                const jitterAmplitude = c.thickness * 0.6;
-                                const jitter = (Math.random() - 0.5) * jitterAmplitude;
-
-                                // wrap around effect
-                                const cx = p.x + p.nx * (jitter + (arcOffset * c.thickness * 0.4));
-                                const cy = p.y + p.ny * (jitter + (arcOffset * c.thickness * 0.4));
-
-                                ctx.lineTo(cx, cy);
-                            }
-                            ctx.stroke();
+                        // Core white electric spark
+                        ctx.strokeStyle = rgba(CFG.elecCore, 1);
+                        ctx.lineWidth = c.thickness * 0.25; // slightly thinner than the 0.6 to look sharper on thick cable
+                        ctx.filter = 'none';
+                        // Add some jitter to the white core to make it look "crackling"
+                        ctx.beginPath();
+                        ctx.moveTo(surgePts[0].x, surgePts[0].y);
+                        for (let i = 1; i < surgePts.length; i++) {
+                            // High-frequency noise jitter
+                            const jitterX = rand(-2, 2);
+                            const jitterY = rand(-2, 2);
+                            ctx.lineTo(surgePts[i].x + jitterX, surgePts[i].y + jitterY);
                         }
+                        ctx.stroke();
 
                         ctx.globalCompositeOperation = 'source-over';
                         ctx.filter = 'none';
