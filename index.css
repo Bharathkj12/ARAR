@@ -551,7 +551,6 @@ ul {
   width: clamp(160px, 22vw, 280px);
   height: clamp(160px, 22vw, 280px);
   border-radius: 50%;
-  overflow: hidden;
   position: relative;
   box-shadow:
     0 0 0 4px rgba(255, 255, 255, 0.15),
@@ -559,6 +558,10 @@ ul {
     0 0 100px rgba(180, 0, 0, 0.3);
   animation: logoPulseGlow 3s ease-in-out infinite alternate;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1000px; /* needed for 3D effect of children */
 }
 
 @keyframes logoPulseGlow {
@@ -571,12 +574,35 @@ ul {
   }
 }
 
-.logo-3d-video {
+.logo-3d-spinner {
+  width: 70%;
+  height: 70%;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: spin3D 8s linear infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-3d-svg-layer {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
+  object-fit: contain;
+  position: absolute;
+  top: 0;
+  left: 0;
+  backface-visibility: hidden;
+}
+
+/* Add a slight dark filter to inner layers to simulate shading on the extruded edge */
+.logo-3d-svg-layer.inner-layer {
+  filter: brightness(0.6);
+}
+
+@keyframes spin3D {
+  0% { transform: rotateY(0deg); }
+  100% { transform: rotateY(-360deg); }
 }
 
 /* ---- Brand text ---- */
