@@ -583,9 +583,9 @@ ul {
   will-change: transform;
 }
 
-/* Add a slight dark filter to inner layers to simulate shading on the extruded edge */
+/* Blend the layers to create a smooth solid edge, and apply rich, deep shading */
 .logo-3d-svg-layer.inner-layer {
-  filter: brightness(0.6);
+  filter: brightness(0.55) contrast(1.2) blur(0.35px);
 }
 
 @keyframes spin3D {
