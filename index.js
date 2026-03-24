@@ -341,14 +341,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const ctx = canvas.getContext('2d');
 
         const CFG = {
-            count: 6,                 // Number of cables
-            thickness: 18,            // Base cable thickness
-            pulseSpeed: 1000,         // Pixels per second electricity travels
-            pulseLength: 250,         // Length of the electricity pulse
-            cableBase: [30, 30, 30],  // Dark grey base color
-            cableHighlight: [90, 90, 90], // Light grey 3D curve highlight
-            elecCore: [220, 240, 255],// Bright icy blue/white core
-            elecGlow: [40, 140, 255]  // Electric neon blue glow
+            count: 6,                 // Fewer, thicker cables for realistic focus
+            thickness: 45,            // Very thick industrial cable base
+            pulseSpeed: 400,          // Speed of electrical surge
+            pulseLength: 350,         // Length of the surge
+            cableBase: [20, 20, 20],  // Almost black matte rubber
+            cableHighlight: [70, 70, 70], // Light reflection on rubber
+            cableGroove: [10, 10, 10], // Deep shadows for ribbed texture
+            elecCore: [255, 255, 255],// White-hot core
+            elecGlow: [0, 150, 255]   // Intense cyan/blue high-voltage arc
         };
 
         function resize() {
@@ -359,42 +360,34 @@ document.addEventListener('DOMContentLoaded', () => {
         resize();
         window.addEventListener('resize', resize);
 
-        // Utility: standard seeded-like random
         function rand(min, max) { return Math.random() * (max - min) + min; }
         function rgba(rgb, a) {
             return `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${Math.min(1, Math.max(0, a))})`;
         }
 
-        // Generate curved cable paths (array of x, y points)
-        // They will fall diagonally roughly from top-right to bottom-left 
-        // behind the logo, simulating heavy industrial power cables.
         const cables = [];
 
         function generateCables() {
             cables.length = 0;
             const w = canvas.width;
             const h = canvas.height;
-            const maxDim = Math.max(w, h);
 
             for (let i = 0; i < CFG.count; i++) {
-                // start positions scattered along top and right edge
-                const startX = rand(-w * 0.2, w * 1.2);
-                const startY = -200 - rand(0, h * 0.5);
+                // Diagonal heavy droop
+                const startX = rand(w * 0.1, w * 0.8);
+                const startY = -200;
 
-                // End positions scattered along bottom and left edge
-                const endX = startX - rand(w * 0.5, w * 1.5);
-                const endY = h + 200 + rand(0, h * 0.5);
+                const endX = startX - rand(w * 0.2, w * 0.6);
+                const endY = h + 200;
 
-                // Create a bezier curve between start and end
-                const cp1x = startX + rand(-400, 400);
-                const cp1y = startY + (endY - startY) * rand(0.2, 0.4);
+                const cp1x = startX + rand(-200, 200);
+                const cp1y = h * 0.3;
 
-                const cp2x = endX + rand(-400, 400);
-                const cp2y = startY + (endY - startY) * rand(0.6, 0.8);
+                const cp2x = endX + rand(-200, 200);
+                const cp2y = h * 0.7;
 
-                // Sample the curve into a polyline of points
                 const pts = [];
-                const steps = 60; // Resolution of the cable curve
+                const steps = 150; // High resolution for texture calculation
                 let totalLen = 0;
 
                 for (let t = 0; t <= steps; t++) {
@@ -403,31 +396,33 @@ document.addEventListener('DOMContentLoaded', () => {
                     const x = u * u * u * startX + 3 * u * u * pct * cp1x + 3 * u * pct * pct * cp2x + pct * pct * pct * endX;
                     const y = u * u * u * startY + 3 * u * u * pct * cp1y + 3 * u * pct * pct * cp2y + pct * pct * pct * endY;
 
+                    // Calculate tangent/normal for 3D drawing
+                    let dx = 0, dy = 1;
                     if (t > 0) {
-                        const dx = x - pts[t - 1].x;
-                        const dy = y - pts[t - 1].y;
+                        dx = x - pts[t - 1].x;
+                        dy = y - pts[t - 1].y;
                         totalLen += Math.sqrt(dx * dx + dy * dy);
                     }
-                    pts.push({ x, y, len: totalLen });
+
+                    const angle = Math.atan2(dy, dx);
+                    const nx = Math.cos(angle + Math.PI / 2);
+                    const ny = Math.sin(angle + Math.PI / 2);
+
+                    pts.push({ x, y, len: totalLen, nx, ny, angle });
                 }
 
-                // Add to array with independent electricity pulse trackers
                 cables.push({
                     pts,
                     totalLen,
-                    thickness: rand(CFG.thickness * 0.6, CFG.thickness * 1.4),
-                    // Current pulse offset along the cable length
+                    thickness: rand(CFG.thickness * 0.8, CFG.thickness * 1.2),
                     pulseDist: rand(0, totalLen),
-                    // Specific pulse speed to vary them
-                    speed: CFG.pulseSpeed * rand(0.7, 1.3),
-                    // 3D shadow offset perspective
-                    depth: rand(0.4, 1)
+                    speed: CFG.pulseSpeed * rand(0.8, 1.2),
+                    depth: rand(0.6, 1.2) // For parallax and shadow
                 });
             }
         }
 
         generateCables();
-        // Re-gen if window reshapes entirely
         let lastW = canvas.width;
         window.addEventListener('resize', () => {
             if (Math.abs(canvas.width - lastW) > 100) {
@@ -442,35 +437,34 @@ document.addEventListener('DOMContentLoaded', () => {
             const dt = (ts - last) / 1000;
             last = ts;
 
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Define "one background" fill — plain black to emphasize cables
+            ctx.fillStyle = '#010101';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Draw each cable
             cables.forEach(c => {
-                // Update pulse
                 c.pulseDist += c.speed * dt;
-                if (c.pulseDist - CFG.pulseLength > c.totalLen) {
-                    c.pulseDist = -CFG.pulseLength; // Reset to top
+                if (c.pulseDist - CFG.pulseLength > c.totalLen + 200) {
+                    c.pulseDist = -CFG.pulseLength;
                 }
 
                 const pts = c.pts;
+                if (pts.length < 2) return;
 
-                // 1. Draw solid 3D Cable Base (shadowed tube)
+                // 1. Shadow
+                ctx.beginPath();
+                ctx.moveTo(pts[0].x, pts[0].y + 30 * c.depth);
+                for (let i = 1; i < pts.length; i++) {
+                    ctx.lineTo(pts[i].x, pts[i].y + 30 * c.depth);
+                }
+                ctx.strokeStyle = 'rgba(0,0,0,0.8)';
+                ctx.lineWidth = c.thickness;
                 ctx.lineCap = 'round';
                 ctx.lineJoin = 'round';
-
-                // Draw drop shadow
-                ctx.beginPath();
-                ctx.moveTo(pts[0].x, pts[0].y + 15 * c.depth);
-                for (let i = 1; i < pts.length; i++) {
-                    ctx.lineTo(pts[i].x, pts[i].y + 15 * c.depth);
-                }
-                ctx.strokeStyle = 'rgba(0,0,0,0.6)';
-                ctx.lineWidth = c.thickness;
-                ctx.filter = `blur(${5 * c.depth}px)`;
+                ctx.filter = `blur(${15 * c.depth}px)`;
                 ctx.stroke();
                 ctx.filter = 'none';
 
-                // Physical cable base (dark)
+                // 2. Base Cable Tube
                 ctx.beginPath();
                 ctx.moveTo(pts[0].x, pts[0].y);
                 for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
@@ -478,64 +472,82 @@ document.addEventListener('DOMContentLoaded', () => {
                 ctx.lineWidth = c.thickness;
                 ctx.stroke();
 
-                // 3D Highlight curve (inset slightly and lighter)
+                // 3. Corrugated Texture (ribs along the cable)
+                const ribSpacing = 8;
+                ctx.lineWidth = 3;
+                ctx.strokeStyle = rgba(CFG.cableGroove, 0.9);
+                for (let i = 0; i < pts.length; i++) {
+                    if (Math.floor(pts[i].len) % ribSpacing < 2) {
+                        const p = pts[i];
+                        // Draw a perpendicular line across the thickness
+                        const hw = c.thickness * 0.45;
+                        ctx.beginPath();
+                        ctx.moveTo(p.x - p.nx * hw, p.y - p.ny * hw);
+                        ctx.lineTo(p.x + p.nx * hw, p.y + p.ny * hw);
+                        ctx.stroke();
+                    }
+                }
+
+                // 4. Highlight for 3D cylinder curve
                 ctx.beginPath();
-                // offset normal to give 3D tube effect
-                ctx.moveTo(pts[0].x - 2, pts[0].y - 2);
-                for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x - 2, pts[i].y - 2);
-                ctx.strokeStyle = rgba(CFG.cableHighlight, 0.4);
-                ctx.lineWidth = c.thickness * 0.4;
+                ctx.moveTo(pts[0].x - pts[0].nx * c.thickness * 0.2, pts[0].y - pts[0].ny * c.thickness * 0.2);
+                for (let i = 1; i < pts.length; i++) {
+                    ctx.lineTo(pts[i].x - pts[i].nx * c.thickness * 0.2, pts[i].y - pts[i].ny * c.thickness * 0.2);
+                }
+                ctx.strokeStyle = rgba(CFG.cableHighlight, 0.15);
+                ctx.lineWidth = c.thickness * 0.3;
                 ctx.stroke();
 
-                // 2. Draw the Electricity Pulse OVER the cable
-                // We find the sub-path of the pulse based on pulseDist
+                // 5. Electricity Surge (Arcs jumping around the cable surface)
                 const pStart = c.pulseDist - CFG.pulseLength;
                 const pEnd = c.pulseDist;
 
-                // Only draw if pulse is currently within cable bounds
                 if (pEnd > 0 && pStart < c.totalLen) {
+                    const surgePts = pts.filter(p => p.len >= pStart && p.len <= pEnd);
 
-                    const pulsePts = [];
-                    for (let i = 0; i < pts.length; i++) {
-                        const p = pts[i];
-                        if (p.len >= pStart && p.len <= pEnd) {
-                            pulsePts.push(p);
-                        }
-                    }
-
-                    if (pulsePts.length > 1) {
+                    if (surgePts.length > 1) {
                         ctx.globalCompositeOperation = 'lighter';
 
-                        // Wide red glow
+                        // Wide ambient glow
                         ctx.beginPath();
-                        ctx.moveTo(pulsePts[0].x, pulsePts[0].y);
-                        for (let i = 1; i < pulsePts.length; i++) ctx.lineTo(pulsePts[i].x, pulsePts[i].y);
-                        ctx.strokeStyle = rgba(CFG.elecGlow, 0.6);
-                        ctx.lineWidth = c.thickness * 2.5;
-                        ctx.filter = 'blur(12px)';
+                        ctx.moveTo(surgePts[0].x, surgePts[0].y);
+                        for (let i = 1; i < surgePts.length; i++) ctx.lineTo(surgePts[i].x, surgePts[i].y);
+                        ctx.strokeStyle = rgba(CFG.elecGlow, 0.4);
+                        ctx.lineWidth = c.thickness * 3;
+                        ctx.filter = 'blur(20px)';
                         ctx.stroke();
 
-                        // Inner red glow
-                        ctx.strokeStyle = rgba(CFG.elecGlow, 0.9);
-                        ctx.lineWidth = c.thickness * 1.2;
-                        ctx.filter = 'blur(4px)';
-                        ctx.stroke();
+                        // Arcing lightning bolts snapping along the cable
+                        ctx.filter = 'drop-shadow(0 0 8px rgba(0, 150, 255, 0.8))';
 
-                        // Core white electric spark
-                        ctx.strokeStyle = rgba(CFG.elecCore, 1);
-                        ctx.lineWidth = c.thickness * 0.6;
-                        ctx.filter = 'none';
-                        // Add some jitter to the white core to make it look "crackling"
-                        ctx.beginPath();
-                        ctx.moveTo(pulsePts[0].x, pulsePts[0].y);
-                        for (let i = 1; i < pulsePts.length; i++) {
-                            // High-frequency noise jitter perpendicular to path
-                            const jitter = rand(-2, 2);
-                            ctx.lineTo(pulsePts[i].x + jitter, pulsePts[i].y + jitter);
+                        // Draw several jagged arcs
+                        for (let arcOffset = -1; arcOffset <= 1; arcOffset += 2) {
+                            ctx.beginPath();
+                            ctx.strokeStyle = rgba(CFG.elecCore, 0.9);
+                            ctx.lineWidth = 2 + Math.random() * 2;
+
+                            let px = surgePts[0].x;
+                            let py = surgePts[0].y;
+                            ctx.moveTo(px, py);
+
+                            for (let i = 1; i < surgePts.length; i += 2) {
+                                const p = surgePts[i];
+                                // Jitter perpendicular to the cable for arcing effect
+                                // The arc clings to the edges of the cable mostly
+                                const jitterAmplitude = c.thickness * 0.6;
+                                const jitter = (Math.random() - 0.5) * jitterAmplitude;
+
+                                // wrap around effect
+                                const cx = p.x + p.nx * (jitter + (arcOffset * c.thickness * 0.4));
+                                const cy = p.y + p.ny * (jitter + (arcOffset * c.thickness * 0.4));
+
+                                ctx.lineTo(cx, cy);
+                            }
+                            ctx.stroke();
                         }
-                        ctx.stroke();
 
                         ctx.globalCompositeOperation = 'source-over';
+                        ctx.filter = 'none';
                     }
                 }
             });
