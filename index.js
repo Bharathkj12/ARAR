@@ -360,7 +360,16 @@ document.addEventListener('DOMContentLoaded', () => {
         resize();
         window.addEventListener('resize', resize);
 
-        function rand(min, max) { return Math.random() * (max - min) + min; }
+        // Seeded PRNG to keep the cable background consistent across refreshes
+        let seed = 42;
+        function seededRandom() {
+            let t = seed += 0x6D2B79F5;
+            t = Math.imul(t ^ (t >>> 15), t | 1);
+            t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+            return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        }
+
+        function rand(min, max) { return seededRandom() * (max - min) + min; }
         function rgba(rgb, a) {
             return `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${Math.min(1, Math.max(0, a))})`;
         }
@@ -368,6 +377,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const cables = [];
 
         function generateCables() {
+            seed = 42; // Reset seed every time we generate cables
             cables.length = 0;
             const w = canvas.width;
             const h = canvas.height;
