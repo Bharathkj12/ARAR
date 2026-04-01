@@ -629,8 +629,9 @@ ul {
 .hero {
   position: relative;
   width: 100%;
-  height: 100vh;
-  min-height: 600px;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
   overflow: hidden;
 }
 
@@ -638,7 +639,6 @@ ul {
   position: absolute;
   inset: 0;
   opacity: 0;
-  transition: opacity 1.2s var(--ease-out);
   z-index: 1;
 }
 
@@ -652,12 +652,6 @@ ul {
   inset: 0;
   background-size: cover;
   background-position: center;
-  transform: scale(1.05);
-  transition: transform 8s ease-out;
-}
-
-.hero-slide.active .hero-slide-bg {
-  transform: scale(1);
 }
 
 .hero-slide-overlay {
@@ -685,9 +679,8 @@ ul {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  background: var(--glass-bg);
+  background: rgba(20, 20, 20, 0.85);
   border: 1px solid var(--glass-border);
-  backdrop-filter: blur(10px);
   padding: 8px 20px;
   border-radius: var(--radius-full);
   font-size: var(--fs-xs);
@@ -697,7 +690,6 @@ ul {
   color: var(--deep-red-hover);
   margin-bottom: 24px;
   width: fit-content;
-  animation: fadeInUp 0.8s var(--ease-out) 0.3s both;
 }
 
 .hero-tag .dot {
@@ -709,13 +701,12 @@ ul {
 }
 
 .hero-title {
-  font-size: var(--fs-display);
+  font-size: clamp(2.5rem, 5vw, var(--fs-display));
   font-weight: 900;
   line-height: 1.05;
   letter-spacing: -1px;
   color: var(--white);
   margin-bottom: 24px;
-  animation: fadeInUp 0.8s var(--ease-out) 0.5s both;
 }
 
 .hero-title .highlight {
@@ -729,14 +720,12 @@ ul {
   max-width: 560px;
   line-height: 1.8;
   margin-bottom: 40px;
-  animation: fadeInUp 0.8s var(--ease-out) 0.7s both;
 }
 
 .hero-btns {
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
-  animation: fadeInUp 0.8s var(--ease-out) 0.9s both;
 }
 
 .btn {
@@ -819,129 +808,25 @@ ul {
    CHAIRMAN HERO ANIMATIONS
    ============================================ */
 
-/* Floating Particles */
+/* Floating Particles (Disabled) */
 .hero-particles {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-.particle {
-  position: absolute;
-  left: var(--x);
-  top: var(--y);
-  width: 4px;
-  height: 4px;
-  background: var(--deep-red);
-  border-radius: 50%;
-  opacity: 0;
-  animation: particleFloat var(--d) ease-in-out infinite;
-  animation-delay: calc(var(--s) * 3s);
-  box-shadow: 0 0 8px var(--deep-red-glow), 0 0 20px rgba(139, 26, 26, 0.15);
-}
-
-@keyframes particleFloat {
-
-  0%,
-  100% {
-    transform: translate(0, 0) scale(var(--s));
-    opacity: 0;
-  }
-
-  20% {
-    opacity: 0.6;
-  }
-
-  50% {
-    transform: translate(30px, -40px) scale(calc(var(--s) * 1.4));
-    opacity: 0.4;
-  }
-
-  80% {
-    opacity: 0.2;
-  }
+  display: none;
 }
 
 /* Entrance Animations */
-.anim-pop-in {
-  opacity: 0;
-  transform: scale(0.85) translateY(20px);
-  animation: popIn 0.7s var(--ease-spring) forwards;
-  animation-delay: var(--delay, 0s);
-}
-
-@keyframes popIn {
-  0% {
-    opacity: 0;
-    transform: scale(0.85) translateY(20px);
-  }
-
-  60% {
-    opacity: 1;
-    transform: scale(1.03) translateY(-3px);
-  }
-
-  100% {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-
-.anim-slide-up {
-  opacity: 0;
-  transform: translateY(40px);
-  animation: slideUp 0.8s var(--ease-out) forwards;
-  animation-delay: var(--delay, 0s);
-}
-
-@keyframes slideUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.anim-fade-in {
-  opacity: 0;
-  animation: simpleFadeIn 0.8s ease forwards;
-  animation-delay: var(--delay, 0s);
-}
-
-@keyframes simpleFadeIn {
-  to {
-    opacity: 1;
-  }
+/* Entrance Animations (Simplified) */
+.anim-pop-in, .anim-slide-up, .anim-fade-in {
+  opacity: 1;
+  transform: none;
 }
 
 .anim-grow-width {
-  width: 0;
-  animation: growWidth 0.6s var(--ease-out) forwards;
-  animation-delay: var(--delay, 0s);
+  width: 80px;
 }
 
-@keyframes growWidth {
-  to {
-    width: 80px;
-  }
-}
-
-/* Text Glow */
+/* Text Glow (Static) */
 .text-glow {
-  text-shadow: 0 0 30px rgba(139, 26, 26, 0.5), 0 0 60px rgba(139, 26, 26, 0.2);
-  animation: textPulseGlow 3s ease-in-out infinite alternate;
-  animation-delay: 1.8s;
-}
-
-@keyframes textPulseGlow {
-  0% {
-    text-shadow: 0 0 30px rgba(139, 26, 26, 0.5), 0 0 60px rgba(139, 26, 26, 0.2);
-  }
-
-  100% {
-    text-shadow: 0 0 45px rgba(139, 26, 26, 0.7), 0 0 90px rgba(139, 26, 26, 0.3);
-  }
+  color: var(--deep-red);
 }
 
 /* Vertical Accent Line */
@@ -962,19 +847,9 @@ ul {
   }
 }
 
-/* Ken Burns slow zoom on chairman BG */
+/* Ken Burns slow zoom (Disabled) */
 .chairman-bg {
-  animation: kenBurns 25s ease-in-out infinite alternate;
-}
-
-@keyframes kenBurns {
-  0% {
-    transform: scale(1.05) translate(0, 0);
-  }
-
-  100% {
-    transform: scale(1.1) translate(-1%, -1%);
-  }
+  background-position: center top;
 }
 
 
