@@ -41,65 +41,63 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    // ---- Hero Slider ----
-    const slides = document.querySelectorAll('.hero-slide');
-    const dots = document.querySelectorAll('.hero-dot');
-    const progressBar = document.getElementById('heroProgressBar');
-    let currentSlide = 0;
-    const totalSlides = slides.length;
-    const slideDuration = 6000; // 6 seconds per slide
-    let slideTimer = null;
-    let progressTimer = null;
-    let progressStart = null;
+    // ---- Companies Dropdown (click toggle + outside-click close) ----
+    const navDropdown = document.getElementById('navCompaniesDropdown');
+    const navTrigger  = document.getElementById('navCompaniesTrigger');
+    const navPanel    = document.getElementById('navCompaniesPanel');
 
-    function goToSlide(index) {
-        slides.forEach(s => s.classList.remove('active'));
-        dots.forEach(d => d.classList.remove('active'));
+    if (navTrigger && navPanel) {
+        navTrigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = navPanel.classList.toggle('open');
+            navTrigger.classList.toggle('open', isOpen);
+            navTrigger.setAttribute('aria-expanded', isOpen);
+        });
 
-        currentSlide = index;
-        slides[currentSlide].classList.add('active');
-        dots[currentSlide].classList.add('active');
-
-        // Reset progress bar
-        startProgress();
-    }
-
-    function nextSlide() {
-        const next = (currentSlide + 1) % totalSlides;
-        goToSlide(next);
-    }
-
-    function startProgress() {
-        if (progressTimer) cancelAnimationFrame(progressTimer);
-        progressStart = performance.now();
-
-        function updateProgress(timestamp) {
-            const elapsed = timestamp - progressStart;
-            const progress = Math.min((elapsed / slideDuration) * 100, 100);
-            progressBar.style.width = progress + '%';
-
-            if (progress < 100) {
-                progressTimer = requestAnimationFrame(updateProgress);
-            } else {
-                nextSlide();
-            }
-        }
-
-        progressTimer = requestAnimationFrame(updateProgress);
-    }
-
-    // Dot click handlers
-    dots.forEach(dot => {
-        dot.addEventListener('click', () => {
-            const target = parseInt(dot.getAttribute('data-dot'));
-            if (target !== currentSlide) {
-                goToSlide(target);
+        // Close when clicking outside
+        document.addEventListener('click', (e) => {
+            if (navDropdown && !navDropdown.contains(e.target)) {
+                navPanel.classList.remove('open');
+                navTrigger.classList.remove('open');
+                navTrigger.setAttribute('aria-expanded', 'false');
             }
         });
-    });
 
-    // Start the slider
-    startProgress();
+        // Close on Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                navPanel.classList.remove('open');
+                navTrigger.classList.remove('open');
+                navTrigger.setAttribute('aria-expanded', 'false');
+            }
+        });
+    }
+
+
+    // ---- Mobile Companies Accordion ----
+    const mobileCompanies = document.querySelector('.mobile-companies');
+    const mobileCompaniesTrigger = document.getElementById('mobileCompaniesTrigger');
+    const mobileCompaniesList    = document.getElementById('mobileCompaniesList');
+
+    if (mobileCompaniesTrigger && mobileCompaniesList) {
+        mobileCompaniesTrigger.addEventListener('click', () => {
+            mobileCompanies.classList.toggle('open');
+        });
+    }
+
+
+    // ---- Chairman Hero Parallax ----
+    const chairmanBg = document.querySelector('.chairman-bg');
+    if (chairmanBg) {
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const heroHeight = document.getElementById('hero').offsetHeight;
+            if (scrolled < heroHeight) {
+                const speed = 0.25;
+                chairmanBg.style.transform = `scale(1.05) translateY(${scrolled * speed}px)`;
+            }
+        }, { passive: true });
+    }
 
 
     // ---- Scroll Animations (Intersection Observer) ----
@@ -139,11 +137,10 @@ document.addEventListener('DOMContentLoaded', () => {
         threshold: 0.3
     });
 
-    // Observe the stats section
-    const statsSection = document.getElementById('stats');
-    if (statsSection) {
-        counterObserver.observe(statsSection);
-    }
+    // Observe ALL .stats sections (works for both index.html and utility.html)
+    const statsSections = document.querySelectorAll('.stats');
+    statsSections.forEach(s => counterObserver.observe(s));
+
 
     function animateCounters() {
         counters.forEach(counter => {
@@ -231,17 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { passive: true });
 
 
-    // ---- Preload hero images ----
-    const heroImages = [
-        'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=1600&q=80',
-        'https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=1600&q=80',
-        'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1600&q=80'
-    ];
-
-    heroImages.forEach(src => {
-        const img = new Image();
-        img.src = src;
-    });
+    // (Hero preload removed — single chairman image loads with the page)
 
     // ---- About Section Scroll Gallery ----
     const aboutGallery = document.getElementById('aboutGallery');
@@ -298,7 +285,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // ---- RadiusOnScroll Effect ----
         const startRadius = 0;    // starts sharp / full-bleed
         const endRadius = 48;     // rounds to 48px
-        const galleryTrack = document.getElementById('aboutGalleryTrack');
 
         function updateRadiusOnScroll() {
             const rect = aboutGallery.getBoundingClientRect();
@@ -389,4 +375,425 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+
+
+
+    // ---- Electric Cables Canvas ----
+    (function initElectricCables() {
+        const canvas = document.getElementById('logoDroplets');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+
+        const CFG = {
+            count: 6,                 // Fewer, thicker cables for realistic focus
+            thickness: 45,            // Very thick industrial cable base
+            pulseSpeed: 400,          // Speed of electrical surge
+            pulseLength: 350,         // Length of the surge
+            cableBase: [20, 20, 20],  // Almost black matte rubber
+            cableHighlight: [70, 70, 70], // Light reflection on rubber
+            cableGroove: [10, 10, 10], // Deep shadows for ribbed texture
+            elecCore: [180, 220, 255],// Softer, pale blue core (less bright white)
+            elecGlow: [0, 80, 180]    // Deeper, less intense cyan/blue glow
+        };
+
+        function resize() {
+            const s = canvas.parentElement;
+            canvas.width = s.offsetWidth;
+            canvas.height = s.offsetHeight;
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        // Seeded PRNG to keep the cable background consistent across refreshes
+        let seed = 42;
+        function seededRandom() {
+            let t = seed += 0x6D2B79F5;
+            t = Math.imul(t ^ (t >>> 15), t | 1);
+            t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+            return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        }
+
+        function rand(min, max) { return seededRandom() * (max - min) + min; }
+        function rgba(rgb, a) {
+            return `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${Math.min(1, Math.max(0, a))})`;
+        }
+
+        const cables = [];
+
+        function generateCables() {
+            seed = 42; // Reset seed every time we generate cables
+            cables.length = 0;
+            const w = canvas.width;
+            const h = canvas.height;
+
+            for (let i = 0; i < CFG.count; i++) {
+                // Diagonal heavy droop
+                const startX = rand(w * 0.1, w * 0.8);
+                const startY = -200;
+
+                const endX = startX - rand(w * 0.2, w * 0.6);
+                const endY = h + 200;
+
+                const cp1x = startX + rand(-200, 200);
+                const cp1y = h * 0.3;
+
+                const cp2x = endX + rand(-200, 200);
+                const cp2y = h * 0.7;
+
+                const pts = [];
+                const steps = 150; // High resolution for texture calculation
+                let totalLen = 0;
+
+                for (let t = 0; t <= steps; t++) {
+                    const pct = t / steps;
+                    const u = 1 - pct;
+                    const x = u * u * u * startX + 3 * u * u * pct * cp1x + 3 * u * pct * pct * cp2x + pct * pct * pct * endX;
+                    const y = u * u * u * startY + 3 * u * u * pct * cp1y + 3 * u * pct * pct * cp2y + pct * pct * pct * endY;
+
+                    // Calculate tangent/normal for 3D drawing
+                    let dx = 0, dy = 1;
+                    if (t > 0) {
+                        dx = x - pts[t - 1].x;
+                        dy = y - pts[t - 1].y;
+                        totalLen += Math.sqrt(dx * dx + dy * dy);
+                    }
+
+                    const angle = Math.atan2(dy, dx);
+                    const nx = Math.cos(angle + Math.PI / 2);
+                    const ny = Math.sin(angle + Math.PI / 2);
+
+                    pts.push({ x, y, len: totalLen, nx, ny, angle });
+                }
+
+                cables.push({
+                    pts,
+                    totalLen,
+                    thickness: rand(CFG.thickness * 0.8, CFG.thickness * 1.2),
+                    pulseDist: rand(0, totalLen),
+                    speed: CFG.pulseSpeed * rand(0.8, 1.2),
+                    depth: rand(0.6, 1.2) // For parallax and shadow
+                });
+            }
+        }
+
+        generateCables();
+        let lastW = canvas.width;
+        window.addEventListener('resize', () => {
+            if (Math.abs(canvas.width - lastW) > 100) {
+                generateCables();
+                lastW = canvas.width;
+            }
+        });
+
+        let last = null;
+        function draw(ts) {
+            if (!last) last = ts;
+            const dt = (ts - last) / 1000;
+            last = ts;
+
+            // Define "one background" fill — plain black to emphasize cables
+            ctx.fillStyle = '#010101';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            cables.forEach(c => {
+                c.pulseDist += c.speed * dt;
+                if (c.pulseDist - CFG.pulseLength > c.totalLen + 200) {
+                    c.pulseDist = -CFG.pulseLength;
+                }
+
+                const pts = c.pts;
+                if (pts.length < 2) return;
+
+                // 1. Shadow
+                ctx.beginPath();
+                ctx.moveTo(pts[0].x, pts[0].y + 30 * c.depth);
+                for (let i = 1; i < pts.length; i++) {
+                    ctx.lineTo(pts[i].x, pts[i].y + 30 * c.depth);
+                }
+                ctx.strokeStyle = 'rgba(0,0,0,0.8)';
+                ctx.lineWidth = c.thickness;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                ctx.filter = `blur(${15 * c.depth}px)`;
+                ctx.stroke();
+                ctx.filter = 'none';
+
+                // 2. Base Cable Tube
+                ctx.beginPath();
+                ctx.moveTo(pts[0].x, pts[0].y);
+                for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
+                ctx.strokeStyle = rgba(CFG.cableBase, 1);
+                ctx.lineWidth = c.thickness;
+                ctx.stroke();
+
+                // 3. Corrugated Texture (ribs along the cable)
+                const ribSpacing = 8;
+                ctx.lineWidth = 3;
+                ctx.strokeStyle = rgba(CFG.cableGroove, 0.9);
+                for (let i = 0; i < pts.length; i++) {
+                    if (Math.floor(pts[i].len) % ribSpacing < 2) {
+                        const p = pts[i];
+                        // Draw a perpendicular line across the thickness
+                        const hw = c.thickness * 0.45;
+                        ctx.beginPath();
+                        ctx.moveTo(p.x - p.nx * hw, p.y - p.ny * hw);
+                        ctx.lineTo(p.x + p.nx * hw, p.y + p.ny * hw);
+                        ctx.stroke();
+                    }
+                }
+
+                // 4. Highlight for 3D cylinder curve
+                ctx.beginPath();
+                ctx.moveTo(pts[0].x - pts[0].nx * c.thickness * 0.2, pts[0].y - pts[0].ny * c.thickness * 0.2);
+                for (let i = 1; i < pts.length; i++) {
+                    ctx.lineTo(pts[i].x - pts[i].nx * c.thickness * 0.2, pts[i].y - pts[i].ny * c.thickness * 0.2);
+                }
+                ctx.strokeStyle = rgba(CFG.cableHighlight, 0.15);
+                ctx.lineWidth = c.thickness * 0.3;
+                ctx.stroke();
+
+                // 5. Electricity Surge (Arcs jumping around the cable surface)
+                const pStart = c.pulseDist - CFG.pulseLength;
+                const pEnd = c.pulseDist;
+
+                if (pEnd > 0 && pStart < c.totalLen) {
+                    const surgePts = pts.filter(p => p.len >= pStart && p.len <= pEnd);
+
+                    if (surgePts.length > 1) {
+                        ctx.globalCompositeOperation = 'lighter';
+
+                        // Wide glow
+                        ctx.beginPath();
+                        ctx.moveTo(surgePts[0].x, surgePts[0].y);
+                        for (let i = 1; i < surgePts.length; i++) ctx.lineTo(surgePts[i].x, surgePts[i].y);
+                        ctx.strokeStyle = rgba(CFG.elecGlow, 0.6);
+                        ctx.lineWidth = c.thickness * 2.5;
+                        ctx.filter = 'blur(12px)';
+                        ctx.stroke();
+
+                        // Inner glow
+                        ctx.beginPath();
+                        ctx.moveTo(surgePts[0].x, surgePts[0].y);
+                        for (let i = 1; i < surgePts.length; i++) ctx.lineTo(surgePts[i].x, surgePts[i].y);
+                        ctx.strokeStyle = rgba(CFG.elecGlow, 0.9);
+                        ctx.lineWidth = c.thickness * 1.2;
+                        ctx.filter = 'blur(4px)';
+                        ctx.stroke();
+
+                        // Core white electric spark
+                        ctx.strokeStyle = rgba(CFG.elecCore, 1);
+                        ctx.lineWidth = c.thickness * 0.25; // slightly thinner than the 0.6 to look sharper on thick cable
+                        ctx.filter = 'none';
+                        // Add some jitter to the white core to make it look "crackling"
+                        ctx.beginPath();
+                        ctx.moveTo(surgePts[0].x, surgePts[0].y);
+                        for (let i = 1; i < surgePts.length; i++) {
+                            // High-frequency noise jitter
+                            const jitterX = rand(-2, 2);
+                            const jitterY = rand(-2, 2);
+                            ctx.lineTo(surgePts[i].x + jitterX, surgePts[i].y + jitterY);
+                        }
+                        ctx.stroke();
+
+                        ctx.globalCompositeOperation = 'source-over';
+                        ctx.filter = 'none';
+                    }
+                }
+            });
+
+            requestAnimationFrame(draw);
+        }
+
+        requestAnimationFrame(draw);
+    })();
+
+
+    // ---- Subsidiaries Radial Flow Diagram ----
+    (function initRadialFlow() {
+        const svg = document.getElementById('radialFlowSvg');
+        const root = document.getElementById('rfRoot');
+        const children = document.querySelectorAll('.rf-child');
+        if (!svg || !root || !children.length) return;
+
+        const branchColors = { utility: '#ffc832', petro: '#50a0ff', infra: '#50dc82' };
+        let flowPaths = [];
+
+        function getBBox(el) {
+            const wRect = svg.getBoundingClientRect();
+            const r = el.getBoundingClientRect();
+            return { left: r.left - wRect.left, top: r.top - wRect.top, w: r.width, h: r.height };
+        }
+
+        function rightMid(el) { const b = getBBox(el); return { x: b.left + b.w, y: b.top + b.h / 2 }; }
+        function leftMid(el) { const b = getBBox(el); return { x: b.left, y: b.top + b.h / 2 }; }
+
+        function cubicD(x1, y1, x2, y2) {
+            const cx = x1 + (x2 - x1) * 0.6;
+            return `M${x1},${y1} C${cx},${y1} ${cx},${y2} ${x2},${y2}`;
+        }
+
+        function mkel(tag, attrs) {
+            const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+            for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
+            return el;
+        }
+
+        function drawConnectors() {
+            while (svg.firstChild) svg.removeChild(svg.firstChild);
+            flowPaths = [];
+
+            // Check if wrapper is in column layout (mobile)
+            const wrapper = document.querySelector('.radial-flow-wrapper');
+            if (!wrapper || getComputedStyle(wrapper).flexDirection === 'column') return;
+
+            const from = rightMid(root);
+
+            children.forEach((child, i) => {
+                const branch = child.dataset.branch;
+                const color = branchColors[branch] || '#D22630';
+                const to = leftMid(child);
+                const d = cubicD(from.x, from.y, to.x, to.y);
+
+                // Base dim track
+                svg.appendChild(mkel('path', { d, fill: 'none', stroke: 'rgba(255,255,255,0.07)', 'stroke-width': '2', 'stroke-linecap': 'round' }));
+                // Coloured glow
+                svg.appendChild(mkel('path', { d, fill: 'none', stroke: color, 'stroke-width': '2', opacity: '0.2', 'stroke-linecap': 'round' }));
+                // Flowing pulse dash
+                const pulse = mkel('path', { d, fill: 'none', stroke: color, 'stroke-width': '3', 'stroke-linecap': 'round', 'stroke-dasharray': '16 400', 'stroke-dashoffset': '400', opacity: '0.9' });
+                svg.appendChild(pulse);
+                flowPaths.push({ el: pulse, branch, color, offset: 400 - i * 133 });
+            });
+        }
+
+        let lastTs2;
+        function animateFlow(ts) {
+            if (!lastTs2) lastTs2 = ts;
+            const dt = ts - lastTs2;
+            lastTs2 = ts;
+            flowPaths.forEach(p => {
+                p.offset -= dt * 0.35;
+                if (p.offset < -16) p.offset = 416;
+                p.el.setAttribute('stroke-dashoffset', p.offset.toFixed(1));
+            });
+            requestAnimationFrame(animateFlow);
+        }
+
+        function setupBranchHover() {
+            children.forEach((child, i) => {
+                child.addEventListener('mouseenter', () => {
+                    if (flowPaths[i]) { flowPaths[i].el.setAttribute('stroke-width', '5'); flowPaths[i].el.setAttribute('opacity', '1'); }
+                    const all = svg.querySelectorAll('path');
+                    const gi = i * 3 + 1;
+                    if (all[gi]) { all[gi].setAttribute('opacity', '0.65'); all[gi].setAttribute('stroke-width', '4'); }
+                });
+                child.addEventListener('mouseleave', () => {
+                    if (flowPaths[i]) { flowPaths[i].el.setAttribute('stroke-width', '3'); flowPaths[i].el.setAttribute('opacity', '0.9'); }
+                    const all = svg.querySelectorAll('path');
+                    const gi = i * 3 + 1;
+                    if (all[gi]) { all[gi].setAttribute('opacity', '0.2'); all[gi].setAttribute('stroke-width', '2'); }
+                });
+            });
+        }
+
+        let rfTimer;
+        window.addEventListener('resize', () => { clearTimeout(rfTimer); rfTimer = setTimeout(drawConnectors, 150); });
+
+        drawConnectors();
+        requestAnimationFrame(animateFlow);
+        setupBranchHover();
+        setTimeout(drawConnectors, 500);
+        setTimeout(drawConnectors, 1200);
+
+
+    })();
+
+
+    // ---- Zoom-Into-Logo Transition ----
+    (function initZoomTransition() {
+        const introSection = document.getElementById('logo-intro');
+        const logoWrap = document.getElementById('logo3dWrap');
+        const overlay = document.getElementById('zoomOverlay');
+        const nextSection = document.getElementById('showcase');
+
+        if (!introSection || !logoWrap || !overlay || !nextSection) return;
+
+        let isTransitioning = false;
+        let hasTransitioned = false;
+
+        function triggerZoom() {
+            if (isTransitioning || hasTransitioned) return;
+            if (window.scrollY > 20) return;
+
+            isTransitioning = true;
+            document.body.style.overflow = 'hidden';
+
+            introSection.classList.add('zoom-transitioning');
+            logoWrap.style.animation = 'none';
+            void logoWrap.offsetHeight; // force reflow
+
+            // Scale up — "fall into" the logo
+            logoWrap.style.transform = 'scale(18)';
+
+            // Black overlay fades in partway through the zoom
+            setTimeout(() => { overlay.classList.add('visible'); }, 480);
+
+            // After zoom peak: jump to section 2 and reset everything
+            setTimeout(() => {
+                hasTransitioned = true;
+
+                nextSection.scrollIntoView({ behavior: 'instant', block: 'start' });
+
+                // Reset logo state silently under the black overlay
+                introSection.classList.remove('zoom-transitioning');
+                logoWrap.style.transition = 'none';
+                logoWrap.style.transform = '';
+                logoWrap.style.animation = '';
+                logoWrap.style.borderRadius = '';
+                document.body.style.overflow = '';
+
+                // Reveal section 2 by fading overlay away
+                requestAnimationFrame(() => { overlay.classList.remove('visible'); });
+
+                isTransitioning = false;
+            }, 920);
+        }
+
+        // Reset state when user scrolls back to top
+        window.addEventListener('scroll', () => {
+            if (window.scrollY < 5) {
+                hasTransitioned = false;
+                logoWrap.style.transition = 'none';
+                logoWrap.style.transform = '';
+                logoWrap.style.animation = '';
+                logoWrap.style.borderRadius = '';
+                introSection.classList.remove('zoom-transitioning');
+                overlay.classList.remove('visible');
+            }
+        }, { passive: true });
+
+        // Mouse wheel / trackpad
+        introSection.addEventListener('wheel', (e) => {
+            if (hasTransitioned || isTransitioning || window.scrollY > 20) return;
+            if (e.deltaY > 0) { e.preventDefault(); triggerZoom(); }
+        }, { passive: false });
+
+        // Touch swipe up
+        let touchStartY = 0;
+        introSection.addEventListener('touchstart', (e) => {
+            touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+        introSection.addEventListener('touchmove', (e) => {
+            if (hasTransitioned || isTransitioning || window.scrollY > 20) return;
+            if (touchStartY - e.touches[0].clientY > 30) { e.preventDefault(); triggerZoom(); }
+        }, { passive: false });
+
+        // Keyboard: Arrow Down, Page Down, Space
+        document.addEventListener('keydown', (e) => {
+            if (hasTransitioned || isTransitioning || window.scrollY > 20) return;
+            if (['ArrowDown', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); triggerZoom(); }
+        });
+
+    })();
+
 });
+
