@@ -137,11 +137,10 @@ document.addEventListener('DOMContentLoaded', () => {
         threshold: 0.3
     });
 
-    // Observe the stats section
-    const statsSection = document.getElementById('stats');
-    if (statsSection) {
-        counterObserver.observe(statsSection);
-    }
+    // Observe ALL .stats sections (works for both index.html and utility.html)
+    const statsSections = document.querySelectorAll('.stats');
+    statsSections.forEach(s => counterObserver.observe(s));
+
 
     function animateCounters() {
         counters.forEach(counter => {

@@ -2370,7 +2370,7 @@ ul {
 /* Timeline track */
 .stats-timeline {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: space-between;
   position: relative;
   padding: 0 24px;
@@ -2416,6 +2416,7 @@ ul {
   flex: 1;
   max-width: 240px;
   will-change: transform;
+  align-self: stretch;
 }
 
 /* Top content: number + icon — no backdrop-filter, solid dark bg */
@@ -2423,6 +2424,7 @@ ul {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 12px;
   margin-bottom: 20px;
   padding: 28px 20px 24px;
@@ -2434,6 +2436,7 @@ ul {
               box-shadow 0.35s ease,
               background 0.35s ease;
   width: 100%;
+  flex: 1;
 }
 
 .timeline-milestone:hover .milestone-content {
@@ -2448,10 +2451,27 @@ ul {
   font-weight: 900;
   color: var(--white);
   line-height: 1;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 1px;
+  flex-wrap: nowrap;
 }
 
 .stat-number .plus {
   color: var(--deep-red);
+}
+
+/* Unit suffix (e.g. "km") inside a stat number */
+.stat-number .unit {
+  font-size: 0.38em;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  align-self: flex-end;
+  padding-bottom: 0.1em;
+  margin-left: 1px;
 }
 
 .milestone-icon {
@@ -3286,6 +3306,7 @@ ul {
 
   .milestone-content {
     flex-direction: row;
+    align-items: center;
     gap: 16px;
     margin-bottom: 0;
     padding: 16px 20px;
@@ -3301,7 +3322,10 @@ ul {
     text-align: left;
     letter-spacing: 1px;
     flex-shrink: 0;
-    min-width: 120px;
+    min-width: 0;
+    max-width: 160px;
+    white-space: normal;
+    line-height: 1.4;
   }
 
   .all-services-grid {
