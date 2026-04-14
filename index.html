@@ -26,7 +26,39 @@
         <a href="#about">About</a>
         <a href="#services">Services</a>
         <a href="#stats">Experience</a>
-        <a href="#all-services">Solutions</a>
+        <!-- Companies Dropdown -->
+        <div class="nav-dropdown" id="navCompaniesDropdown">
+          <button class="nav-dropdown-trigger" aria-haspopup="true" aria-expanded="false" id="navCompaniesTrigger">
+            Companies
+            <svg class="nav-dd-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="nav-dropdown-panel" id="navCompaniesPanel" role="menu">
+            <a href="utility.html" class="nav-dd-item nav-dd-utility" role="menuitem">
+              <span class="nav-dd-dot nav-dd-dot--utility"></span>
+              <span class="nav-dd-info">
+                <span class="nav-dd-name">ARAR Utility Co.</span>
+                <span class="nav-dd-sub">EPC Electrical &amp; Power</span>
+              </span>
+              <svg class="nav-dd-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+            </a>
+            <a href="https://www.ararinfra.com/" target="_blank" rel="noopener noreferrer" class="nav-dd-item nav-dd-infra" role="menuitem">
+              <span class="nav-dd-dot nav-dd-dot--infra"></span>
+              <span class="nav-dd-info">
+                <span class="nav-dd-name">ARAR Infra Co.</span>
+                <span class="nav-dd-sub">Civil &amp; Road Works</span>
+              </span>
+              <svg class="nav-dd-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+            </a>
+            <div class="nav-dd-item nav-dd-petro nav-dd-soon" role="menuitem">
+              <span class="nav-dd-dot nav-dd-dot--petro"></span>
+              <span class="nav-dd-info">
+                <span class="nav-dd-name">ARAR Petrochemicals</span>
+                <span class="nav-dd-sub">Piping &amp; Process Plants</span>
+              </span>
+              <span class="nav-dd-soon-badge">Soon</span>
+            </div>
+          </div>
+        </div>
         <a href="#clients">Partners</a>
         <a href="careers.html">Careers</a>
         <a href="#contact">Contact</a>
@@ -67,7 +99,24 @@
     <a href="#about" class="mobile-nav-link">About</a>
     <a href="#services" class="mobile-nav-link">Services</a>
     <a href="#stats" class="mobile-nav-link">Experience</a>
-    <a href="#all-services" class="mobile-nav-link">Solutions</a>
+    <!-- Companies accordion -->
+    <div class="mobile-companies">
+      <button class="mobile-companies-trigger" id="mobileCompaniesTrigger">
+        Companies
+        <svg class="mobile-dd-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="mobile-companies-list" id="mobileCompaniesList">
+        <a href="utility.html" class="mobile-company-link mobile-company-utility">
+          <span class="mobile-co-dot mobile-co-dot--utility"></span>ARAR Utility Co.
+        </a>
+        <a href="https://www.ararinfra.com/" target="_blank" rel="noopener noreferrer" class="mobile-company-link mobile-company-infra">
+          <span class="mobile-co-dot mobile-co-dot--infra"></span>ARAR Infra Co.
+        </a>
+        <span class="mobile-company-link mobile-company-petro mobile-company-soon">
+          <span class="mobile-co-dot mobile-co-dot--petro"></span>ARAR Petrochemicals <em>(Soon)</em>
+        </span>
+      </div>
+    </div>
     <a href="#clients" class="mobile-nav-link">Partners</a>
     <a href="careers.html" class="mobile-nav-link">Careers</a>
     <a href="#contact" class="mobile-nav-link">Contact</a>
@@ -178,7 +227,8 @@
 
           <!-- ARAR Utility -->
           <div class="rf-node rf-child rf-utility" id="rfUtility" data-branch="utility">
-            <a href="utility.html" class="rf-node-inner rf-node-inner--link">
+            <a href="utility.html" class="rf-node-inner rf-node-inner--link rf-node-inner--clickable">
+              <div class="rf-clickable-badge">Explore ↗</div>
               <div class="rf-child-icon rf-icon-utility">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
@@ -188,7 +238,11 @@
                 <img src="ARAR.png" alt="ARAR Utility" class="rf-child-logo">
               </div>
               <span class="rf-child-label">ARAR UTILITY COMPANY L.L.C</span>
-              <span class="rf-child-desc">EPC Electrical &amp; Power ↗</span>
+              <span class="rf-child-desc">EPC Electrical &amp; Power</span>
+              <span class="rf-visit-chip">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                Visit Page
+              </span>
             </a>
           </div>
 
@@ -215,7 +269,8 @@
           <!-- ARAR Infra -->
           <div class="rf-node rf-child rf-infra" id="rfInfra" data-branch="infra">
             <a href="https://www.ararinfra.com/" target="_blank" rel="noopener noreferrer"
-              class="rf-node-inner rf-node-inner--link">
+              class="rf-node-inner rf-node-inner--link rf-node-inner--clickable rf-node-inner--clickable-infra">
+              <div class="rf-clickable-badge rf-clickable-badge--infra">Explore ↗</div>
               <div class="rf-child-icon rf-icon-infra">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4" />
@@ -226,7 +281,11 @@
                 <img src="img/companies/infra.png" alt="ARAR Infra" class="rf-child-logo">
               </div>
               <span class="rf-child-label">ARAR INFRA Contracting Co L.L.C</span>
-              <span class="rf-child-desc">Civil &amp; Road Works ↗</span>
+              <span class="rf-child-desc">Civil &amp; Road Works</span>
+              <span class="rf-visit-chip rf-visit-chip--infra">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                Visit Site
+              </span>
             </a>
           </div>
 

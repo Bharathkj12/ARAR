@@ -269,6 +269,297 @@ ul {
   transform: translateY(0) rotate(0deg) scale(0.95);
 }
 
+/* ── Companies Dropdown ── */
+.nav-dropdown {
+  position: relative;
+}
+
+.nav-dropdown-trigger {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--fs-small);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--off-white);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 0;
+  font-family: var(--font-family);
+  transition: color var(--transition-base);
+  position: relative;
+}
+
+.nav-dropdown-trigger::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--deep-red);
+  transition: width var(--transition-base);
+}
+
+.nav-dropdown:hover .nav-dropdown-trigger::after,
+.nav-dropdown-trigger.open::after {
+  width: 100%;
+}
+
+.nav-dropdown:hover .nav-dropdown-trigger,
+.nav-dropdown-trigger.open {
+  color: var(--white);
+}
+
+.nav-dd-chevron {
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+
+.nav-dropdown-trigger.open .nav-dd-chevron {
+  transform: rotate(180deg);
+}
+
+.nav-dropdown-panel {
+  position: absolute;
+  top: calc(100% + 18px);
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  min-width: 260px;
+  background: rgba(15, 15, 15, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 8px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+  z-index: 2000;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255,255,255,0.04);
+}
+
+/* Arrow notch */
+.nav-dropdown-panel::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 12px;
+  background: rgba(15, 15, 15, 0.97);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  border-left: 1px solid rgba(255,255,255,0.08);
+  rotate: 45deg;
+}
+
+.nav-dropdown:hover .nav-dropdown-panel,
+.nav-dropdown-panel.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: all;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Each row item */
+.nav-dd-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--off-white);
+  transition: background 0.2s ease, color 0.2s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.nav-dd-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--white);
+}
+
+/* Colorful dot */
+.nav-dd-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.nav-dd-dot--utility { background: #ffc832; box-shadow: 0 0 6px rgba(255,200,50,0.6); }
+.nav-dd-dot--infra   { background: #50dc82; box-shadow: 0 0 6px rgba(80,220,130,0.6); }
+.nav-dd-dot--petro   { background: #50a0ff; box-shadow: 0 0 6px rgba(80,160,255,0.6); }
+
+/* Name + tagline */
+.nav-dd-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.nav-dd-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+.nav-dd-sub {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  letter-spacing: 0.2px;
+  text-transform: none;
+  font-weight: 400;
+}
+
+/* Arrow icon */
+.nav-dd-arrow {
+  opacity: 0;
+  transform: translate(-4px, 4px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  stroke: currentColor;
+  flex-shrink: 0;
+}
+
+.nav-dd-item:hover .nav-dd-arrow {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+/* Per-company hover accent */
+.nav-dd-utility:hover { color: #ffc832; }
+.nav-dd-infra:hover   { color: #50dc82; }
+
+/* "Soon" state */
+.nav-dd-soon {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.nav-dd-soon:hover {
+  background: none;
+  color: var(--off-white);
+}
+
+.nav-dd-soon-badge {
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: rgba(80, 160, 255, 0.15);
+  color: #50a0ff;
+  border: 1px solid rgba(80, 160, 255, 0.3);
+  padding: 2px 7px;
+  border-radius: 20px;
+  flex-shrink: 0;
+}
+
+/* ── Mobile Companies Accordion ── */
+.mobile-companies {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.mobile-companies-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--off-white);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-family);
+  transition: color var(--transition-fast);
+  padding: 0;
+}
+
+.mobile-companies-trigger:hover {
+  color: var(--deep-red);
+}
+
+.mobile-dd-chevron {
+  transition: transform 0.3s ease;
+}
+
+.mobile-companies.open .mobile-dd-chevron {
+  transform: rotate(180deg);
+}
+
+.mobile-companies-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, opacity 0.3s ease, margin-top 0.3s ease;
+  opacity: 0;
+  margin-top: 0;
+}
+
+.mobile-companies.open .mobile-companies-list {
+  max-height: 300px;
+  opacity: 1;
+  margin-top: 12px;
+}
+
+.mobile-company-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--off-white);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+  padding: 6px 20px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  width: 240px;
+  justify-content: center;
+}
+
+.mobile-co-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.mobile-co-dot--utility { background: #ffc832; box-shadow: 0 0 5px rgba(255,200,50,0.6); }
+.mobile-co-dot--infra   { background: #50dc82; box-shadow: 0 0 5px rgba(80,220,130,0.6); }
+.mobile-co-dot--petro   { background: #50a0ff; box-shadow: 0 0 5px rgba(80,160,255,0.6); }
+
+.mobile-company-utility:hover { color: #ffc832; border-color: rgba(255,200,50,0.3); }
+.mobile-company-infra:hover   { color: #50dc82; border-color: rgba(80,220,130,0.3); }
+
+.mobile-company-soon {
+  opacity: 0.45;
+  cursor: not-allowed;
+  font-size: 0.85rem;
+}
+
+.mobile-company-soon em {
+  font-style: normal;
+  font-size: 0.7rem;
+  color: #50a0ff;
+}
+
+
 /* Hamburger */
 .hamburger {
   display: none;
@@ -1198,10 +1489,164 @@ ul {
     0 16px 40px rgba(0, 0, 0, 0.5);
 }
 
-/* inner link variant (for Infra) */
+/* inner link variant (for Infra & Utility) */
 .rf-node-inner--link {
   text-decoration: none;
   color: inherit;
+}
+
+/* ── Clickable card: ARAR Utility ── */
+.rf-node-inner--clickable {
+  cursor: pointer;
+  position: relative;
+  border-color: rgba(255, 200, 50, 0.30) !important;
+  box-shadow:
+    0 0 0 2px rgba(255, 200, 50, 0.08),
+    0 0 28px rgba(255, 200, 50, 0.15),
+    0 12px 40px rgba(0, 0, 0, 0.5);
+  animation: utilityCardPulse 2.8s ease-in-out infinite alternate;
+}
+
+@keyframes utilityCardPulse {
+  0% {
+    box-shadow:
+      0 0 0 2px rgba(255, 200, 50, 0.08),
+      0 0 20px rgba(255, 200, 50, 0.12),
+      0 12px 40px rgba(0, 0, 0, 0.5);
+  }
+  100% {
+    box-shadow:
+      0 0 0 4px rgba(255, 200, 50, 0.14),
+      0 0 40px rgba(255, 200, 50, 0.28),
+      0 16px 50px rgba(0, 0, 0, 0.55);
+  }
+}
+
+.rf-node-inner--clickable:hover {
+  border-color: rgba(255, 200, 50, 0.7) !important;
+  transform: translateY(-8px) scale(1.04) !important;
+  animation: none;
+  box-shadow:
+    0 0 0 4px rgba(255, 200, 50, 0.15),
+    0 0 50px rgba(255, 200, 50, 0.35),
+    0 20px 50px rgba(0, 0, 0, 0.55) !important;
+}
+
+/* "Explore ↗" floating badge */
+.rf-clickable-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: linear-gradient(135deg, #ffc832, #ffaa00);
+  color: #1a0f00;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  border-radius: 20px;
+  line-height: 1;
+  pointer-events: none;
+  box-shadow: 0 2px 10px rgba(255, 200, 50, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.rf-node-inner--clickable:hover .rf-clickable-badge {
+  transform: scale(1.08);
+  box-shadow: 0 4px 18px rgba(255, 200, 50, 0.6);
+}
+
+/* "Visit Page →" bottom chip */
+.rf-visit-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 6px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 200, 50, 0.35);
+  background: rgba(255, 200, 50, 0.07);
+  color: #ffc832;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  transition: background 0.3s ease, border-color 0.3s ease, gap 0.3s ease;
+}
+
+.rf-visit-chip svg {
+  stroke: #ffc832;
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+
+.rf-node-inner--clickable:hover .rf-visit-chip {
+  background: rgba(255, 200, 50, 0.15);
+  border-color: rgba(255, 200, 50, 0.7);
+  gap: 8px;
+}
+
+.rf-node-inner--clickable:hover .rf-visit-chip svg {
+  transform: translateX(3px);
+}
+
+/* ── Infra card: green color overrides ── */
+.rf-node-inner--clickable-infra {
+  border-color: rgba(80, 220, 130, 0.30) !important;
+  box-shadow:
+    0 0 0 2px rgba(80, 220, 130, 0.08),
+    0 0 28px rgba(80, 220, 130, 0.15),
+    0 12px 40px rgba(0, 0, 0, 0.5);
+  animation: infraCardPulse 2.8s ease-in-out infinite alternate;
+}
+
+@keyframes infraCardPulse {
+  0% {
+    box-shadow:
+      0 0 0 2px rgba(80, 220, 130, 0.08),
+      0 0 20px rgba(80, 220, 130, 0.12),
+      0 12px 40px rgba(0, 0, 0, 0.5);
+  }
+  100% {
+    box-shadow:
+      0 0 0 4px rgba(80, 220, 130, 0.14),
+      0 0 40px rgba(80, 220, 130, 0.28),
+      0 16px 50px rgba(0, 0, 0, 0.55);
+  }
+}
+
+.rf-node-inner--clickable-infra:hover {
+  border-color: rgba(80, 220, 130, 0.7) !important;
+  animation: none;
+  box-shadow:
+    0 0 0 4px rgba(80, 220, 130, 0.15),
+    0 0 50px rgba(80, 220, 130, 0.35),
+    0 20px 50px rgba(0, 0, 0, 0.55) !important;
+}
+
+.rf-clickable-badge--infra {
+  background: linear-gradient(135deg, #50dc82, #2ebd68);
+  color: #041a0c;
+  box-shadow: 0 2px 10px rgba(80, 220, 130, 0.4);
+}
+
+.rf-node-inner--clickable-infra:hover .rf-clickable-badge--infra {
+  box-shadow: 0 4px 18px rgba(80, 220, 130, 0.6);
+}
+
+.rf-visit-chip--infra {
+  border-color: rgba(80, 220, 130, 0.35);
+  background: rgba(80, 220, 130, 0.07);
+  color: #50dc82;
+}
+
+.rf-visit-chip--infra svg {
+  stroke: #50dc82;
+}
+
+.rf-node-inner--clickable-infra:hover .rf-visit-chip--infra {
+  background: rgba(80, 220, 130, 0.15);
+  border-color: rgba(80, 220, 130, 0.7);
 }
 
 /* ── Icon badge ── */
@@ -1931,7 +2376,7 @@ ul {
   padding: 0 24px;
 }
 
-/* Connecting horizontal line */
+/* Connecting horizontal line — no GPU filter, just opacity layers */
 .timeline-line {
   position: absolute;
   top: 50%;
@@ -1950,17 +2395,14 @@ ul {
   z-index: 0;
 }
 
+/* Soft glow under the line via box-shadow — no filter:blur */
 .timeline-line::before {
   content: '';
   position: absolute;
   inset: -4px 0;
-  background: linear-gradient(90deg,
-      transparent 0%,
-      rgba(210, 38, 48, 0.06) 20%,
-      rgba(210, 38, 48, 0.12) 50%,
-      rgba(210, 38, 48, 0.06) 80%,
-      transparent 100%);
-  filter: blur(8px);
+  background: inherit;
+  opacity: 0.3;
+  border-radius: 4px;
 }
 
 /* Milestone node */
@@ -1973,9 +2415,10 @@ ul {
   cursor: pointer;
   flex: 1;
   max-width: 240px;
+  will-change: transform;
 }
 
-/* Top content: number + icon */
+/* Top content: number + icon — no backdrop-filter, solid dark bg */
 .milestone-content {
   display: flex;
   flex-direction: column;
@@ -1983,19 +2426,20 @@ ul {
   gap: 12px;
   margin-bottom: 20px;
   padding: 28px 20px 24px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
+  background: linear-gradient(135deg, rgba(30, 30, 30, 0.95) 0%, rgba(18, 18, 18, 0.98) 100%);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-lg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  transition: all 0.5s var(--ease-out);
+  transition: transform 0.35s var(--ease-out),
+              border-color 0.35s ease,
+              box-shadow 0.35s ease,
+              background 0.35s ease;
   width: 100%;
 }
 
 .timeline-milestone:hover .milestone-content {
   transform: scale(1.05);
   border-color: rgba(210, 38, 48, 0.4);
-  background: linear-gradient(135deg, rgba(210, 38, 48, 0.12) 0%, rgba(210, 38, 48, 0.04) 100%);
+  background: linear-gradient(135deg, rgba(210, 38, 48, 0.12) 0%, rgba(18, 18, 18, 0.98) 100%);
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 30px rgba(210, 38, 48, 0.15);
 }
 
@@ -2022,12 +2466,13 @@ ul {
   width: 28px;
   height: 28px;
   stroke: var(--deep-red);
-  transition: all var(--transition-base);
+  transition: stroke var(--transition-base);
 }
 
 .timeline-milestone:hover .milestone-icon svg {
   stroke: var(--deep-red-hover);
-  filter: drop-shadow(0 0 6px rgba(210, 38, 48, 0.5));
+  /* drop-shadow removed — use simpler opacity bump */
+  opacity: 1;
 }
 
 /* Glowing dot on the line */
@@ -2040,10 +2485,12 @@ ul {
   box-shadow: 0 0 12px var(--deep-red-glow), 0 0 24px rgba(210, 38, 48, 0.2);
   position: relative;
   z-index: 3;
-  transition: all 0.4s var(--ease-spring);
+  transition: transform 0.4s var(--ease-spring), box-shadow 0.4s ease;
   margin-bottom: 20px;
+  will-change: transform;
 }
 
+/* Ping ring — uses only transform+opacity, GPU-friendly */
 .dot-ping {
   position: absolute;
   inset: -6px;
@@ -2051,35 +2498,17 @@ ul {
   border: 2px solid var(--deep-red);
   opacity: 0;
   animation: dotPing 3s ease-out infinite;
+  will-change: transform, opacity;
 }
 
-.timeline-milestone:nth-child(3) .dot-ping {
-  animation-delay: 0.5s;
-}
-
-.timeline-milestone:nth-child(4) .dot-ping {
-  animation-delay: 1s;
-}
-
-.timeline-milestone:nth-child(5) .dot-ping {
-  animation-delay: 1.5s;
-}
+.timeline-milestone:nth-child(3) .dot-ping { animation-delay: 0.5s; }
+.timeline-milestone:nth-child(4) .dot-ping { animation-delay: 1s; }
+.timeline-milestone:nth-child(5) .dot-ping { animation-delay: 1.5s; }
 
 @keyframes dotPing {
-  0% {
-    transform: scale(0.8);
-    opacity: 0.8;
-  }
-
-  70% {
-    transform: scale(2.2);
-    opacity: 0;
-  }
-
-  100% {
-    transform: scale(2.2);
-    opacity: 0;
-  }
+  0%   { transform: scale(0.8); opacity: 0.8; }
+  70%  { transform: scale(2.2); opacity: 0; }
+  100% { transform: scale(2.2); opacity: 0; }
 }
 
 .timeline-milestone:hover .milestone-dot {

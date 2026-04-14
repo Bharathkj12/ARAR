@@ -41,6 +41,51 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
+    // ---- Companies Dropdown (click toggle + outside-click close) ----
+    const navDropdown = document.getElementById('navCompaniesDropdown');
+    const navTrigger  = document.getElementById('navCompaniesTrigger');
+    const navPanel    = document.getElementById('navCompaniesPanel');
+
+    if (navTrigger && navPanel) {
+        navTrigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = navPanel.classList.toggle('open');
+            navTrigger.classList.toggle('open', isOpen);
+            navTrigger.setAttribute('aria-expanded', isOpen);
+        });
+
+        // Close when clicking outside
+        document.addEventListener('click', (e) => {
+            if (navDropdown && !navDropdown.contains(e.target)) {
+                navPanel.classList.remove('open');
+                navTrigger.classList.remove('open');
+                navTrigger.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        // Close on Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                navPanel.classList.remove('open');
+                navTrigger.classList.remove('open');
+                navTrigger.setAttribute('aria-expanded', 'false');
+            }
+        });
+    }
+
+
+    // ---- Mobile Companies Accordion ----
+    const mobileCompanies = document.querySelector('.mobile-companies');
+    const mobileCompaniesTrigger = document.getElementById('mobileCompaniesTrigger');
+    const mobileCompaniesList    = document.getElementById('mobileCompaniesList');
+
+    if (mobileCompaniesTrigger && mobileCompaniesList) {
+        mobileCompaniesTrigger.addEventListener('click', () => {
+            mobileCompanies.classList.toggle('open');
+        });
+    }
+
+
     // ---- Chairman Hero Parallax ----
     const chairmanBg = document.querySelector('.chairman-bg');
     if (chairmanBg) {
